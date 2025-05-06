@@ -14,7 +14,8 @@ CREATE TABLE Empleados (
     Email VARCHAR(100) UNIQUE,
     Telefono VARCHAR(20),
     Jornada VARCHAR(50),
-    HorasExtra INT DEFAULT 0
+    HorasExtra INT DEFAULT 0,
+    Salario DECIMAL(10, 2)
 );
 
 CREATE TABLE Clientes (
@@ -48,17 +49,15 @@ CREATE TABLE Garaje (
     Estado VARCHAR(20) DEFAULT 'Disponible' 
 );
 
-CREATE TABLE Pagos (
-    PagoID INT PRIMARY KEY AUTO_INCREMENT,
-    ReservaID INT NOT NULL,
-    FechaPago TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    Monto DECIMAL(10, 2) NOT NULL, 
-    MetodoPago VARCHAR(50) NOT NULL,
-    FechaReembolso DATE NULL,
-    MotivoReembolso VARCHAR(255) NULL,
-    EmpleadoDni INT NULL, 
+CREATE TABLE HistorialPagos (
+    HistorialPagoID INT PRIMARY KEY AUTO_INCREMENT,
+    Cuantia DECIMAL(10, 2) NOT NULL,
+    Fecha DATE NOT NULL,
+    Concepto VARCHAR(20) NOT NULL,
+    ReservaID INT,
+    EmpleadoDni VARCHAR(20) NULL,  
     FOREIGN KEY (ReservaID) REFERENCES Reservas(ReservaID) ON DELETE CASCADE,
-    FOREIGN KEY (EmpleadoDni) REFERENCES Empleados(EmpleadoDni) ON DELETE SET NULL 
+    FOREIGN KEY (EmpleadoDni) REFERENCES Empleados(EmpleadoDni) ON DELETE SET NULL
 );
 
 CREATE TABLE Eventos (
@@ -100,11 +99,10 @@ CREATE INDEX idx_PrecioTotal ON Reservas (PrecioTotal);
 CREATE INDEX idx_Estado ON Garaje (Estado);
 
 -- Índices para la tabla Pagos
-CREATE INDEX idx_ReservaID ON Pagos (ReservaID);
-CREATE INDEX idx_FechaPago ON Pagos (FechaPago);
-CREATE INDEX idx_FechaReembolso ON Pagos (FechaReembolso);
-CREATE INDEX idx_MetodoPago ON Pagos (MetodoPago);
-CREATE INDEX idx_EmpleadoDni ON Pagos (EmpleadoDni);
+CREATE INDEX idx_fecha ON HistorialPagos (Fecha);
+CREATE INDEX idx_concepto ON HistorialPagos (Concepto);
+CREATE INDEX idx_reserva_id ON HistorialPagos (ReservaID);
+CREATE INDEX idx_empleado_id ON HistorialPagos (EmpleadoID);
 
 -- Índices para la tabla Eventos
 CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
