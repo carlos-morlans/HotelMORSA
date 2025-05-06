@@ -1,20 +1,16 @@
 package Dao;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import Model.Clientes;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class ClienteDAO {
 
-    public void insertar(Cliente cliente) {
+    public void insertar(Clientes cliente) {
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
             String query = "INSERT INTO Clientes (ClienteDni, Nombre, Apellido, Email, Telefono, Direccion) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setString(1, cliente.getDni()); // Asigna el valor del teléfono
+                stmt.setString(1, cliente.getClienteDni()); // Asigna el valor del teléfono
                 stmt.setString(2, cliente.getNombre()); 
                 stmt.setString(3, cliente.getApellidos());
                 stmt.setString(4, cliente.getEmail());
@@ -70,10 +66,10 @@ public class ClienteDAO {
 
     }
 
-    public Cliente buscarPorDni(String dni){
+    public Clientes buscarPorDni(String dni){
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
-            Cliente cliente;
+            Clientes cliente;
             String nombre;
             String apellidos;
             String telefono;
@@ -101,7 +97,7 @@ public class ClienteDAO {
                     telefono = rs.getString("Num_tlf");
                     email = rs.getString("Email");
 
-                    cliente = new Cliente(nombre, apellidos, dni, direccion, telefono, email);
+                    cliente = new Clientes(nombre, apellidos, dni, direccion, telefono, email);
                     return cliente;
                 }
                 
@@ -121,15 +117,15 @@ public class ClienteDAO {
         return null;
     }
 
-    public ArrayList<Cliente> obtenerTodos() {
+    public ArrayList<Clientes> obtenerTodos() {
               // Establecer conexión
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
             // Consulta SQL para obtener todos los Cliente
             String query = "SELECT * FROM Clientes"; 
             try (Statement stmt = conexion.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-                ArrayList<Cliente> clientes = new ArrayList<>();
-                Cliente cliente; 
+                ArrayList<Clientes> clientes = new ArrayList<>();
+                Clientes cliente; 
                 String nombre;
                 String apellidos;
                 String dni;
@@ -146,7 +142,7 @@ public class ClienteDAO {
                     dni = rs.getString("ClienteDni");
                     direccion = rs.getString("Direccion");
                     email = rs.getString("Email");
-                    cliente = new Cliente(nombre, apellidos, dni, direccion, telefono, email);
+                    cliente = new Clientes(dni, nombre, apellidos, email, telefono, direccion);
                     clientes.add(cliente);
 
                 }  
