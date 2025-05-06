@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Model.Empleado;
+import Model.Empleados;
 
 public class EmpleadosDAO {
 
-    public void insertar(Empleado empleado) {
+    public void insertar(Empleados empleado) {
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
             String query = "INSERT INTO Empleados (EmpleadoDni, Nombre, Apellido, Puesto, Email, Telefono, Jornada, HorasExtra) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -73,10 +73,10 @@ public class EmpleadosDAO {
 
     }
 
-    public Empleado buscarPorDni(String dni){
+    public Empleados buscarPorDni(String dni){
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
-            Empleado empleado;
+            Empleados empleado;
             String nombre;
             String apellidos;
             String telefono;
@@ -108,7 +108,7 @@ public class EmpleadosDAO {
                     jornada = rs.getString("Jornada");
                     horas = rs.getInt("HorasExtra");
 
-                    empleado = new Empleado(nombre, apellidos, dni, puesto, telefono, email, jornada);
+                    empleado = new Empleados(nombre, apellidos, dni, puesto, telefono, email, jornada);
                     return empleado;
                 }
                 
@@ -128,15 +128,15 @@ public class EmpleadosDAO {
         return null;
     }
 
-    public ArrayList<Empleado> obtenerTodos() {
+    public ArrayList<Empleados> obtenerTodos() {
               // Establecer conexión
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
             // Consulta SQL para obtener todos los Cliente
             String query = "SELECT * FROM Empleados"; 
             try (Statement stmt = conexion.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-                ArrayList<Empleado> empleados = new ArrayList<>();
-                Empleado empleado; 
+                ArrayList<Empleados> empleados = new ArrayList<>();
+                Empleados empleado; 
                 String nombre;
                 String apellidos;
                 String dni;
@@ -157,7 +157,7 @@ public class EmpleadosDAO {
                     email = rs.getString("Email");
                     jornada = rs.getString("Jornada");
                     horas = rs.getInt("HorasExtra");
-                    empleado = new Empleado(nombre, apellidos, dni, puesto, email, telefono, jornada, horas);
+                    empleado = new Empleados(nombre, apellidos, dni, puesto, email, telefono, jornada, horas);
                     empleados.add(empleado);
 
                 }  
