@@ -1,12 +1,8 @@
 package Dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import Model.Empleados;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class EmpleadosDAO {
 
@@ -15,14 +11,14 @@ public class EmpleadosDAO {
         if (conexion != null) {
             String query = "INSERT INTO Empleados (EmpleadoDni, Nombre, Apellido, Puesto, Email, Telefono, Jornada, HorasExtra) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setString(1, empleado.getDni()); // Asigna el valor del teléfono
+                stmt.setString(1, empleado.getEmpleadoDni()); // Asigna el valor del teléfono
                 stmt.setString(2, empleado.getNombre()); 
-                stmt.setString(3, empleado.getApellidos());
+                stmt.setString(3, empleado.getApellido());
                 stmt.setString(4, empleado.getPuesto());
                 stmt.setString(5, empleado.getEmail());
                 stmt.setString(6, empleado.getTelefono());
                 stmt.setString(7, empleado.getJornada());
-                stmt.setInt(8, empleado.getHoras());
+                stmt.setInt(8, empleado.getHorasExtra());
                 
                 stmt.executeUpdate(); // Ejecuta la consulta de inserción
                 System.out.println("Empleado agregado exitosamente.");
@@ -100,7 +96,7 @@ public class EmpleadosDAO {
                 if (rs.next()) {
                     // Extraemos los datos del ResultSet
                     nombre = rs.getString("Nombre");
-                    apellidos = rs.getString("Apellidos");
+                    apellidos = rs.getString("Apellido");
                     dni = rs.getString("EmpleadoDni");
                     puesto = rs.getString("Puesto");
                     telefono = rs.getString("Telefono");
@@ -108,7 +104,7 @@ public class EmpleadosDAO {
                     jornada = rs.getString("Jornada");
                     horas = rs.getInt("HorasExtra");
 
-                    empleado = new Empleados(nombre, apellidos, dni, puesto, telefono, email, jornada);
+                    empleado = new Empleados(dni, nombre, apellidos, puesto, email, telefono, jornada, horas);
                     return empleado;
                 }
                 

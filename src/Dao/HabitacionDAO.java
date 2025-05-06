@@ -1,12 +1,8 @@
 package Dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 import Model.Habitaciones;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class HabitacionDAO {
 
@@ -15,10 +11,10 @@ public class HabitacionDAO {
         if (conexion != null) {
             String query = "INSERT INTO Habitaciones (NumeroHabitacion, TipoHabitacion, Capacidad, PrecioNoche, Estado) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setInt(1, habitacion.getNumero()); // Asigna el valor del teléfono
-                stmt.setString(2, habitacion.getTipo()); 
+                stmt.setInt(1, habitacion.getNumeroHabitacion()); // Asigna el valor del teléfono
+                stmt.setString(2, habitacion.getTipoHabitacion()); 
                 stmt.setInt(3, habitacion.getCapacidad());
-                stmt.setDouble(4, habitacion.getPrecio());
+                stmt.setDouble(4, habitacion.getPrecioNoche());
                 stmt.setString(5, habitacion.getEstado());
                 
                 stmt.executeUpdate(); // Ejecuta la consulta de inserción
@@ -87,7 +83,7 @@ public class HabitacionDAO {
                 String query = "SELECT NumeroHabitacion, TipoHabitacion, Capacidad, PrecioNoche, Estado" + "FROM Habitaciones WHERE NumeroHabitacion = ?";
 
                 stmt = conexion.prepareStatement(query);
-                stmt.setInt(1, numero.trim()); // Usamos trim() para limpiar espacios
+                stmt.setInt(1, numero); 
 
                 rs = stmt.executeQuery();
 
@@ -142,7 +138,7 @@ public class HabitacionDAO {
                     capacidad = rs.getInt("Capacidad");
                     precio = rs.getDouble("PrecioNoche");
                     estado = rs.getString("Estado");
-                    habitacion = new Habitacion(numero, tipo, capacidad, precio, estado);
+                    habitacion = new Habitaciones(numero, tipo, capacidad, precio, estado);
                     habitaciones.add(habitacion);
 
                 }  
