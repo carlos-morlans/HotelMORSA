@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Model.Habitacion;
+import Model.Habitaciones;
 
 public class HabitacionDAO {
 
-    public void insertar(Habitacion habitacion) {
+    public void insertar(Habitaciones habitacion) {
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
             String query = "INSERT INTO Habitaciones (NumeroHabitacion, TipoHabitacion, Capacidad, PrecioNoche, Estado) VALUES (?, ?, ?, ?, ?)";
@@ -70,10 +70,10 @@ public class HabitacionDAO {
 
     }
 
-    public Habitacion buscarPorNumero(int numero){
+    public Habitaciones buscarPorNumero(int numero){
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
-            Habitacion habitacion;
+            Habitaciones habitacion;
             String tipo;
             int capacidad;
             double precio;
@@ -87,7 +87,7 @@ public class HabitacionDAO {
                 String query = "SELECT NumeroHabitacion, TipoHabitacion, Capacidad, PrecioNoche, Estado" + "FROM Habitaciones WHERE NumeroHabitacion = ?";
 
                 stmt = conexion.prepareStatement(query);
-                stmt.setString(1, dni.trim()); // Usamos trim() para limpiar espacios
+                stmt.setInt(1, numero.trim()); // Usamos trim() para limpiar espacios
 
                 rs = stmt.executeQuery();
 
@@ -100,7 +100,7 @@ public class HabitacionDAO {
                     estado = rs.getString("Estado");
                     
 
-                    habitacion = new Habitacion(numero, tipo, capacidad, precio, estado);
+                    habitacion = new Habitaciones(numero, tipo, capacidad, precio, estado);
                     return habitacion;
                 }
 
@@ -120,15 +120,15 @@ public class HabitacionDAO {
         return null;
     }
 
-    public ArrayList<Habitacion> obtenerTodos() {
+    public ArrayList<Habitaciones> obtenerTodos() {
               // Establecer conexión
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
             // Consulta SQL para obtener todos los Cliente
             String query = "SELECT * FROM Habitaciones"; 
             try (Statement stmt = conexion.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
-                ArrayList<Habitacion> habitaciones = new ArrayList<>();
-                Habitacion habitacion; 
+                ArrayList<Habitaciones> habitaciones = new ArrayList<>();
+                Habitaciones habitacion; 
                 String tipo;
                 int capacidad;
                 double precio;

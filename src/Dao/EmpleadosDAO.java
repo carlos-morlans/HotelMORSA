@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Model.Cliente;
 import Model.Empleado;
 
 public class EmpleadosDAO {
