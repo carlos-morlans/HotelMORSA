@@ -212,26 +212,26 @@ INSERT INTO Reservas (ClienteDni, NumeroHabitacion, FechaEntrada, FechaSalida, N
 INSERT INTO Reservas (ClienteDni, NumeroHabitacion, FechaEntrada, FechaSalida, NumeroAdultos, NumeroNinos, PrecioTotal, EstadoReserva) VALUES ('00112233T', 409, '2025-01-09', '2025-01-16', 3, 2, 600.00, 'Confirmada');
 
 --INSERT HistorialPagos (20)
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (1, 150.00, '2024-01-15', 'Reserva', 1, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (2, 200.00, '2024-02-20', 'Reserva', 2, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (3, 100.00, '2024-03-10', 'Reserva', 3, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (4, 300.00, '2024-04-05', 'Reserva', 4, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (5, 250.00, '2024-05-12', 'Reserva', 5, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (6, 180.00, '2024-06-18', 'Reserva', 6, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (7, 220.00, '2024-07-22', 'Reserva', 7, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (8, 120.00, '2024-08-15', 'Reserva', 8, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (9, 280.00, '2024-09-20', 'Reserva', 9, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (10, 210.00, '2024-10-10', 'Reserva', 10, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (11, -50.00, '2024-02-01', 'Reembolso', 1, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (12, -75.00, '2024-03-01', 'Reembolso', 2, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (13, -25.00, '2024-04-15', 'Reembolso', 3, NULL);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (14, 1200.00, '2024-01-31', 'Pago Empleado', NULL, 1);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (15, 1500.00, '2024-02-29', 'Pago Empleado', NULL, 2);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (16, 1000.00, '2024-03-31', 'Pago Empleado', NULL, 3);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (17, 1300.00, '2024-04-30', 'Pago Empleado', NULL, 4);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (18, 1600.00, '2024-05-31', 'Pago Empleado', NULL, 5);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (19, 1100.00, '2024-06-30', 'Pago Empleado', NULL, 6);
-INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoID) VALUES (20, 1400.00, '2024-07-31', 'Pago Empleado', NULL, 7);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (1, 150.00, '2024-01-15', 'Reserva', 1, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (2, 200.00, '2024-02-20', 'Reserva', 2, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (3, 100.00, '2024-03-10', 'Reserva', 3, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (4, 300.00, '2024-04-05', 'Reserva', 4, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (5, 250.00, '2024-05-12', 'Reserva', 5, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (6, 180.00, '2024-06-18', 'Reserva', 6, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (7, 220.00, '2024-07-22', 'Reserva', 7, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (8, 120.00, '2024-08-15', 'Reserva', 8, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (9, 280.00, '2024-09-20', 'Reserva', 9, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (10, 210.00, '2024-10-10', 'Reserva', 10, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (11, -50.00, '2024-02-01', 'Reembolso', 1, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (12, -75.00, '2024-03-01', 'Reembolso', 2, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (13, -25.00, '2024-04-15', 'Reembolso', 3, NULL);
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (14, 1200.00, '2024-01-31', 'Pago Empleado', NULL, '25701845Z');
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (15, 1500.00, '2024-02-29', 'Pago Empleado', NULL, '48963258P');
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (16, 1000.00, '2024-03-31', 'Pago Empleado', NULL, '37852146L');
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (17, 1300.00, '2024-04-30', 'Pago Empleado', NULL, '19638527A');
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (18, 1600.00, '2024-05-31', 'Pago Empleado', NULL, '92581473B');
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (19, 1100.00, '2024-06-30', 'Pago Empleado', NULL, '61478529C');
+INSERT INTO HistorialPagos (HistorialPagoID, Cuantia, Fecha, Concepto, ReservaID, EmpleadoDni) VALUES (20, 1400.00, '2024-07-31', 'Pago Empleado', NULL, '74185296D');
 
 --INSERT Garaje (80)
 INSERT INTO Garaje (NumeroPlaza, Estado) VALUES (101, 'Disponible');

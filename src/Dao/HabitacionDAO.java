@@ -142,7 +142,7 @@ public class HabitacionDAO {
                     capacidad = rs.getInt("Capacidad");
                     precio = rs.getDouble("PrecioNoche");
                     estado = rs.getString("Estado");
-                    habitacion = new Habitacion(numero, tipo, capacidad, precio, estado);
+                    habitacion = new Habitaciones(numero, tipo, capacidad, precio, estado);
                     habitaciones.add(habitacion);
 
                 }  

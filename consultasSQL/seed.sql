@@ -73,25 +73,20 @@ CREATE TABLE Eventos (
 CREATE INDEX idx_TipoHabitacion ON Habitaciones (TipoHabitacion);
 CREATE INDEX idx_PrecioNoche ON Habitaciones (PrecioNoche);
 CREATE INDEX idx_Estado ON Habitaciones (Estado);
-CREATE INDEX idx_Capacidad ON Habitaciones (Capacidad);
 
 -- Índices para la tabla Empleados
 CREATE INDEX idx_EmpleadoDni ON Empleados (EmpleadoDni);
-CREATE INDEX idx_Apellido ON Empleados (Apellido);
 CREATE INDEX idx_Puesto ON Empleados (Puesto);
 CREATE INDEX idx_Jornada ON Empleados (Jornada);
 CREATE INDEX idx_HorasExtra ON Empleados (HorasExtra);
 
 -- Índices para la tabla Clientes
 CREATE INDEX idx_ClienteDni ON Clientes (ClienteDni);
-CREATE INDEX idx_Apellido ON Clientes (Apellido);
 
 -- Índices para la tabla Reservas
 CREATE INDEX idx_ClienteDni ON Reservas (ClienteDni);
 CREATE INDEX idx_NumeroHabitacion ON Reservas (NumeroHabitacion);
 CREATE INDEX idx_FechaReserva ON Reservas (FechaReserva);
-CREATE INDEX idx_FechaEntrada ON Reservas (FechaEntrada);
-CREATE INDEX idx_FechaSalida ON Reservas (FechaSalida);
 CREATE INDEX idx_EstadoReserva ON Reservas (EstadoReserva);
 CREATE INDEX idx_PrecioTotal ON Reservas (PrecioTotal);
 
@@ -102,7 +97,7 @@ CREATE INDEX idx_Estado ON Garaje (Estado);
 CREATE INDEX idx_fecha ON HistorialPagos (Fecha);
 CREATE INDEX idx_concepto ON HistorialPagos (Concepto);
 CREATE INDEX idx_reserva_id ON HistorialPagos (ReservaID);
-CREATE INDEX idx_empleado_id ON HistorialPagos (EmpleadoID);
+CREATE INDEX idx_empleado_dni ON HistorialPagos (EmpleadoDni);
 
 -- Índices para la tabla Eventos
 CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
