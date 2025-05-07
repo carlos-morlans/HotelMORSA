@@ -7,7 +7,7 @@ CREATE TABLE Habitaciones (
 );
 
 CREATE TABLE Empleados (
-    EmpleadoDni VARCHAR(20) PRIMARY KEY AUTO_INCREMENT,
+    EmpleadoDni VARCHAR(20) PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Apellido VARCHAR(100) NOT NULL,
     Puesto VARCHAR(100) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE HistorialPagos (
     HistorialPagoID INT PRIMARY KEY AUTO_INCREMENT,
     Cuantia DECIMAL(10, 2) NOT NULL,
     Fecha DATE NOT NULL,
-    Concepto VARCHAR(20) NOT NULL,
+    Concepto VARCHAR(50) NOT NULL,
     ReservaID INT,
     EmpleadoDni VARCHAR(20) NULL,  
     FOREIGN KEY (ReservaID) REFERENCES Reservas(ReservaID) ON DELETE CASCADE,
@@ -75,30 +75,25 @@ CREATE INDEX idx_PrecioNoche ON Habitaciones (PrecioNoche);
 CREATE INDEX idx_Estado ON Habitaciones (Estado);
 
 -- Índices para la tabla Empleados
-CREATE INDEX idx_EmpleadoDni ON Empleados (EmpleadoDni);
-CREATE INDEX idx_Puesto ON Empleados (Puesto);
-CREATE INDEX idx_Jornada ON Empleados (Jornada);
-CREATE INDEX idx_HorasExtra ON Empleados (HorasExtra);
+CREATE INDEX idx_ApellidoEmpleado ON Empleados (Apellido);
+CREATE INDEX idx_PuestoEmpleado ON Empleados (Puesto);
 
 -- Índices para la tabla Clientes
-CREATE INDEX idx_ClienteDni ON Clientes (ClienteDni);
+CREATE INDEX idx_apellido_cliente ON Clientes (Apellido);
 
 -- Índices para la tabla Reservas
 CREATE INDEX idx_ClienteDni ON Reservas (ClienteDni);
+CREATE INDEX idx_FechasReserva ON Reservas (FechaEntrada, FechaSalida);
 CREATE INDEX idx_NumeroHabitacion ON Reservas (NumeroHabitacion);
-CREATE INDEX idx_FechaReserva ON Reservas (FechaReserva);
 CREATE INDEX idx_EstadoReserva ON Reservas (EstadoReserva);
-CREATE INDEX idx_PrecioTotal ON Reservas (PrecioTotal);
 
 -- Índice para la tabla Garaje
 CREATE INDEX idx_Estado ON Garaje (Estado);
 
--- Índices para la tabla Pagos
+-- Índices para la tabla HistorialPagos
 CREATE INDEX idx_fecha ON HistorialPagos (Fecha);
-CREATE INDEX idx_concepto ON HistorialPagos (Concepto);
 CREATE INDEX idx_reserva_id ON HistorialPagos (ReservaID);
 CREATE INDEX idx_empleado_dni ON HistorialPagos (EmpleadoDni);
 
 -- Índices para la tabla Eventos
 CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
-CREATE INDEX idx_NombreEvento ON Eventos (NombreEvento);
