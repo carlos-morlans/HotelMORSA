@@ -102,3 +102,16 @@ CREATE INDEX idx_empleado_dni ON HistorialPagos (EmpleadoDni);
 -- Índices para la tabla Eventos
 CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
 CREATE INDEX idx_NombreEvento ON Eventos (NombreEvento);
+
+-- Procedimientos
+DELIMITER //
+
+CREATE Procedure CalcularReserva{
+    IN p_ClienteDni VARCHAR(20),
+    IN p_numeroHabitacion INT,
+    IN p_fechaEntrada DATE,
+    IN p_fechaSalida DATE,
+    IN p_numeroAdultos INT,
+    IN p_numeroNinos INT,
+
+}
