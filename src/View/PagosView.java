@@ -40,45 +40,82 @@ public class PagosView {
 
     public void verHistorialPagos() {
         int limite;
+        int suma;
         String tipo="Historial";
         System.out.println("Historial de pagos:");
         System.out.println("Ingrese el número de pagos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        this.filtroPagos(limite, tipo);  
+        System.out.println("Quieres calcular la suma de los pagos?:");
+        do{
+        System.out.println("1. Si");
+        System.out.println("2. No");
+
+        suma = sc.nextInt();
+        sc.nextLine();
+        }while (suma != 1 && suma != 2);
+
+        this.filtroPagos(limite, tipo, suma);  
     }
 
     public void verIngresos() {
         int limite;
+        int suma;
         String tipo="Ingresos";
         System.out.println("Ingresos:");
         System.out.println("Ingrese el número de ingresos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        this.filtroPagos(limite, tipo);  
+        System.out.println("Quieres calcular la suma de los pagos?:");
+        do{
+        System.out.println("1. Si");
+        System.out.println("2. No");
+
+        suma = sc.nextInt();
+        sc.nextLine();
+        }while (suma != 1 && suma != 2);
+        this.filtroPagos(limite, tipo, suma);  
     }
 
     public void verReembolsos() {
         int limite;
+        int suma;
         String tipo="Reembolsos";
         System.out.println("Reembolsos:");
         System.out.println("Ingrese el número de reembolsos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        this.filtroPagos(limite, tipo);  
+        System.out.println("Quieres calcular la suma de los pagos?:");
+        do{
+        System.out.println("1. Si");
+        System.out.println("2. No");
+
+        suma = sc.nextInt();
+        sc.nextLine();
+        }while (suma != 1 && suma != 2);
+        this.filtroPagos(limite, tipo, suma);  
     }
 
     public void verGastos() {
         int limite;
+        int suma;
         String tipo="Gastos";
         System.out.println("Gastos:");
         System.out.println("Ingrese el número de gastos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        this.filtroPagos(limite, tipo);  
+        System.out.println("Quieres calcular la suma de los pagos?:");
+        do{
+        System.out.println("1. Si");
+        System.out.println("2. No");
+
+        suma = sc.nextInt();
+        sc.nextLine();
+        }while (suma != 1 && suma != 2);
+        this.filtroPagos(limite, tipo, suma);  
     }
 
-    public void filtroPagos(int limite, String tipo) {
+    public void filtroPagos(int limite, String tipo, int suma) {
         int opcion;
         System.out.println("Elija la opción de filtro:");
         System.out.println("1. Por fecha");
@@ -92,17 +129,17 @@ public class PagosView {
         sc.nextLine();
 
         switch (opcion) {
-            case 1 -> this.filtroFecha(limite, tipo);
-            case 2 -> this.filtroCuantia(limite, tipo);
-            case 3 -> this.filtroIDReserva(limite, tipo);
-            case 4 -> this.filtroDNIEmpleado(limite, tipo);
-            case 5 -> pagosDAO.filtroRecientes(limite, tipo);
+            case 1 -> this.filtroFecha(limite, tipo, suma);
+            case 2 -> this.filtroCuantia(limite, tipo, suma);
+            case 3 -> this.filtroIDReserva(limite, tipo, suma);
+            case 4 -> this.filtroDNIEmpleado(limite, tipo, suma);
+            case 5 -> pagosDAO.filtroRecientes(limite, tipo, suma);
            
         }
 
     }
 
-    public void filtroFecha(int limite, String tipo) {
+    public void filtroFecha(int limite, String tipo, int suma) {
         LocalDate fechaInicio;
         LocalDate fechaFin;
 
@@ -112,10 +149,10 @@ public class PagosView {
         System.out.println("Ingrese la fecha de fin (YYYY-MM-DD):");
         fechaFin = reservasView.fechaDia();
 
-        pagosDAO.filtroFecha(limite, fechaInicio, fechaFin, tipo);
+        pagosDAO.filtroFecha(limite, fechaInicio, fechaFin, tipo, suma);
     }
 
-    public void filtroCuantia(int limite, String tipo) {
+    public void filtroCuantia(int limite, String tipo, int suma) {
         double cuantiaMinima;
         double cuantiaMaxima;
 
@@ -126,26 +163,26 @@ public class PagosView {
         cuantiaMaxima = sc.nextDouble();
         sc.nextLine();
 
-        pagosDAO.filtroCuantia(limite, cuantiaMinima, cuantiaMaxima, tipo);
+        pagosDAO.filtroCuantia(limite, cuantiaMinima, cuantiaMaxima, tipo, suma);
     }
 
-    public void filtroIDReserva(int limite, String tipo) {
+    public void filtroIDReserva(int limite, String tipo, int suma) {
         int idReserva;
 
         System.out.println("Ingrese el ID de la reserva:");
         idReserva = sc.nextInt();
         sc.nextLine();
 
-        pagosDAO.filtroIDReserva(limite, idReserva, tipo);
+        pagosDAO.filtroIDReserva(limite, idReserva, tipo, suma);
     }
 
-    public void filtroDNIEmpleado(int limite, String tipo) {
+    public void filtroDNIEmpleado(int limite, String tipo, int suma) {
         String dniEmpleado;
 
         System.out.println("Ingrese el DNI del empleado:");
         dniEmpleado = sc.nextLine();
 
-        pagosDAO.filtroDNIEmpleado(limite, dniEmpleado, tipo);
+        pagosDAO.filtroDNIEmpleado(limite, dniEmpleado, tipo, suma);
     }
 
 

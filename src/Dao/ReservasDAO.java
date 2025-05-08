@@ -1,64 +1,56 @@
 package Dao;
 
+import Model.Reservas;
+import java.io.IOException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
-import Model.Reservas;
+
+ 
 
 public class ReservasDAO {
 
     Connection conexion = ConexionDB.conectar();
 
       public void crearReserva(Reservas reserva) {
-        //el id de la cita se asignará automáticamente después en la BD
-        String query = "INSERT INTO Reservas (ClienteDni, NumeroHabitacion, FechaEntrada, FechaSalida, NumeroAdultos, NumeroNinos, FechaReserva, EstadoReserva, PrecioTotal, FechaCancelacion, MotivoCancelacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-            
+        
+        
+        String sql = "{call CalcularReserva(?, ?, ?, ?, ?, ?, ?)}";
+        
+        try (CallableStatement stmt = conexion.prepareCall(sql)) {
+            // Establecer parámetros de entrada
             stmt.setString(1, reserva.getClienteDni());
             stmt.setInt(2, reserva.getNumeroHabitacion());
-            stmt.setDate(3, new java.sql.Date(reserva.getFechaEntrada().getTime()));
-            stmt.setDate(4, new java.sql.Date(reserva.getFechaSalida().getTime()));
+            
+            // Conversión de LocalDate a java.sql.Date
+            stmt.setDate(3, java.sql.Date.valueOf(reserva.getFechaEntrada()));
+            stmt.setDate(4, java.sql.Date.valueOf(reserva.getFechaSalida()));
+            
             stmt.setInt(5, reserva.getNumeroAdultos());
             stmt.setInt(6, reserva.getNumeroNinos());
-            stmt.setTimestamp(7, Timestamp.valueOf(reserva.getFechaReserva()));
-            stmt.setString(8, reserva.getEstadoReserva());
-            stmt.setDouble(9, reserva.getPrecioTotal());
-            stmt.setDate(10, new java.sql.Date(reserva.getFechaCancelacion().getTime()));
-            stmt.setString(11, reserva.getMotivoCancelacion());
-
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Reserva creada correctamente.");
-            } else {
-                System.out.println("Error al crear la reserva.");
-            }
+            
+            stmt.execute();
         } catch (SQLException e) {
             System.out.println("Error al crear la reserva: " + e.getMessage());
         }
-        
-        
-        
     }
 
-    public void actualizarReserva(Reservas reserva) {
-        String query = "UPDATE Reservas SET ClienteDni = ?, NumeroHabitacion = ?, FechaEntrada = ?, FechaSalida = ?, NumeroAdultos = ?, NumeroNinos = ?, FechaReserva = ?, EstadoReserva = ?, PrecioTotal = ?, FechaCancelacion = ?, MotivoCancelacion = ? WHERE ReservaID = ?";
+    public void actualizarReserva(Reservas reserva, int idReserva) {
+        String query = "UPDATE Reservas SET ClienteDni = ?, NumeroHabitacion = ?, FechaEntrada = ?, FechaSalida = ?, NumeroAdultos = ?, NumeroNinos = ?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, reserva.getClienteDni());
             stmt.setInt(2, reserva.getNumeroHabitacion());
-            stmt.setDate(3, new java.sql.Date(reserva.getFechaEntrada().getTime()));
-            stmt.setDate(4, new java.sql.Date(reserva.getFechaSalida().getTime()));
+            stmt.setDate(3, java.sql.Date.valueOf(reserva.getFechaEntrada()));
+            stmt.setDate(4, java.sql.Date.valueOf(reserva.getFechaSalida()));
             stmt.setInt(5, reserva.getNumeroAdultos());
             stmt.setInt(6, reserva.getNumeroNinos());
-            stmt.setTimestamp(7, Timestamp.valueOf(reserva.getFechaReserva()));
-            stmt.setString(8, reserva.getEstadoReserva());
-            stmt.setDouble(9, reserva.getPrecioTotal());
-            stmt.setDate(10, new java.sql.Date(reserva.getFechaCancelacion().getTime()));
-            stmt.setString(11, reserva.getMotivoCancelacion());
-            stmt.setInt(12, reserva.getReservaID());
+            
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -72,11 +64,12 @@ public class ReservasDAO {
     }
 
     public void cancelarReserva(int reservaID, String motivoCancelacion) {
-        String query = "UPDATE Reservas SET EstadoReserva = 'Cancelada', MotivoCancelacion = ? WHERE ReservaID = ?";
+        String query = "UPDATE Reservas SET EstadoReserva = 'Cancelada', MotivoCancelacion = ?, FechaCancelacion = ? WHERE ReservaID = ? ";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, motivoCancelacion);
             stmt.setInt(2, reservaID);
+            stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -89,7 +82,38 @@ public class ReservasDAO {
         }
     }
 
-    
-    
+    public void consultarReserva(int reservaID) {
+        String query = "SELECT * FROM Reservas WHERE ReservaID = ?";
+        
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setInt(1, reservaID);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("\n=== DATOS COMPLETOS DE LA RESERVA ===");
+                    
+                    // Imprimir cada columna con su valor
+                    System.out.println("ID Reserva: " + rs.getInt("ReservaID"));
+                    System.out.println("DNI Cliente: " + rs.getString("ClienteDni"));
+                    System.out.println("Número Habitación: " + rs.getInt("NumeroHabitacion"));
+                    System.out.println("Fecha Entrada: " + rs.getDate("FechaEntrada"));
+                    System.out.println("Fecha Salida: " + rs.getDate("FechaSalida"));
+                    System.out.println("Número Adultos: " + rs.getInt("NumeroAdultos"));
+                    System.out.println("Número Niños: " + rs.getInt("NumeroNinos"));
+                    System.out.println("Fecha Reserva: " + rs.getTimestamp("FechaReserva"));
+                    System.out.println("Estado Reserva: " + rs.getString("EstadoReserva"));
+                    System.out.println("Precio Total: " + rs.getDouble("PrecioTotal"));
+                    System.out.println("Precio Total: " + rs.getDate("FechaCancelacion"));
+                    System.out.println("Precio Total: " + rs.getString("MotivoCancelacion"));
+                    
+                } else {
+                    System.out.println("No se encontró reserva con ID: " + reservaID);
+                }
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al consultar la reserva: " + e.getMessage());
+        }
+    }
+
 
 }

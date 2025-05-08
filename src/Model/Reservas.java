@@ -1,40 +1,35 @@
 package Model;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 
 public class Reservas {
-    int reservaID;
+    
     String clienteDni;
     int numeroHabitacion;
-    Date fechaEntrada;
-    Date fechaSalida;
+    LocalDate fechaEntrada;
+    LocalDate fechaSalida;
     int numeroAdultos;
     int numeroNinos;
-    Timestamp fechaReserva; 
+    LocalDateTime fechaReserva; 
     String estadoReserva;
     double precioTotal;
-    Date fechaCancelacion;
+    LocalDate fechaCancelacion;
     String motivoCancelacion;
 
-    public Reservas(int reservaID, String clienteDni, int numeroHabitacion, Date fechaEntrada, Date fechaSalida, int numeroAdultos, int numeroNinos, Timestamp fechaReserva, String estadoReserva, double precioTotal, Date fechaCancelacion, String motivoCancelacion){
-        this.reservaID = reservaID;
+    public Reservas(String clienteDni, int numeroHabitacion, LocalDate fechaEntrada, LocalDate fechaSalida, int numeroAdultos, int numeroNinos){
+        
         this.clienteDni = clienteDni;
         this.numeroHabitacion = numeroHabitacion;
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.numeroAdultos = numeroAdultos;
         this.numeroNinos = numeroNinos;
-        this.fechaReserva = fechaReserva;
+        //this.estadoReserva = "Confirmada";
+        this.motivoCancelacion= null;
+        this.fechaCancelacion= null;
+        this.fechaReserva= LocalDateTime.now();
 
-    }
-
-    public int getReservaID() {
-        return reservaID;
-    }
-
-    public void setReservaID(int reservaID) {
-        this.reservaID = reservaID;
     }
 
     public String getClienteDni() {
@@ -53,19 +48,19 @@ public class Reservas {
         this.numeroHabitacion = numeroHabitacion;
     }
 
-    public Date getFechaEntrada() {
+    public LocalDate getFechaEntrada() {
         return fechaEntrada;
     }
 
-    public void setFechaEntrada(Date fechaEntrada) {
+    public void setFechaEntrada(LocalDate fechaEntrada) {
         this.fechaEntrada = fechaEntrada;
     }
 
-    public Date getFechaSalida() {
+    public LocalDate getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(Date fechaSalida) {
+    public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
@@ -85,11 +80,11 @@ public class Reservas {
         this.numeroNinos = numeroNinos;
     }
 
-    public Timestamp getFechaReserva() {
+    public LocalDateTime getFechaReserva() {
         return fechaReserva;
     }
 
-    public void setFechaReserva(Timestamp fechaReserva) {
+    public void setFechaReserva(LocalDateTime fechaReserva) {
         this.fechaReserva = fechaReserva;
     }
 
@@ -109,11 +104,11 @@ public class Reservas {
         this.precioTotal = precioTotal;
     }
 
-    public Date getFechaCancelacion() {
+    public LocalDate getFechaCancelacion() {
         return fechaCancelacion;
     }
 
-    public void setFechaCancelacion(Date fechaCancelacion) {
+    public void setFechaCancelacion(LocalDate fechaCancelacion) {
         this.fechaCancelacion = fechaCancelacion;
     }
 
@@ -125,6 +120,33 @@ public class Reservas {
         this.motivoCancelacion = motivoCancelacion;
     }
 
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Reserva [");
+        sb.append("\n  DNI Cliente: ").append(clienteDni);
+        sb.append("\n  Habitación: ").append(numeroHabitacion);
+        sb.append("\n  Fechas: Entrada=").append(fechaEntrada)
+        .append(" - Salida=").append(fechaSalida)
+        .append(" (").append(ChronoUnit.DAYS.between(fechaEntrada, fechaSalida)).append(" noches)");
+        sb.append("\n  Huéspedes: ").append(numeroAdultos).append(" adultos, ")
+        .append(numeroNinos).append(" niños");
+        sb.append("\n  Estado: ").append(estadoReserva != null ? estadoReserva : "No especificado");
+        sb.append("\n  Fecha reserva: ").append(fechaReserva);
+        
+        if (precioTotal > 0) {
+            sb.append("\n  Precio total: ").append(String.format("%.2f", precioTotal)).append(" €");
+        }
+        
+        if (fechaCancelacion != null) {
+            sb.append("\n  Cancelación: ").append(fechaCancelacion)
+            .append(" - Motivo: ").append(motivoCancelacion != null ? motivoCancelacion : "No especificado");
+        }
+        
+        sb.append("\n]");
+        return sb.toString();
+    }
 
 
 }

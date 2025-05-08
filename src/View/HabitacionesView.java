@@ -88,7 +88,7 @@ public class HabitacionesView {
         }
     }
 
-    private void listarHabitaciones() {
+    public void listarHabitaciones() {
         ArrayList<Habitaciones> habitaciones = habitacionDAO.obtenerTodos();
         if (habitaciones != null && !habitaciones.isEmpty()) {
             System.out.println("\n--- Lista de Habitaciones ---");

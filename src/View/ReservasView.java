@@ -5,12 +5,17 @@ import Model.Reservas;
 import Dao.ReservasDAO;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import View.HabitacionesView;
 
 public class ReservasView {
 
     ReservasDAO reservasDAO = new ReservasDAO();
 
     Scanner sc = new Scanner(System.in);
+
+    Reservas reserva;
+
+    HabitacionesView habitacion;
 
     public void menuReservas() {
 
@@ -44,6 +49,9 @@ public class ReservasView {
 
         System.out.println("Elija el tipo de habitación que desea:");
         System.out.println("1. Individuale, doble, familiare  suit");
+        habitacion.listarHabitaciones();
+
+
         
         System.out.println("Ingrese el número de habitación:");
         int numeroHabitacion = sc.nextInt();
@@ -63,17 +71,9 @@ public class ReservasView {
         int numeroNinos = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Ingrese la fecha de reserva (YYYY-MM-DD HH:MM):");
-        LocalDateTime fechaReserva = this.fechaMinuto();
+     
 
-        System.out.println("Ingrese el estado de la reserva:");
-        String estadoReserva = sc.nextLine();
-
-        System.out.println("Ingrese el precio total:");
-        double precioTotal = sc.nextDouble();
-        sc.nextLine();
-
-        Reservas reserva = new Reservas(0, dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos, fechaReserva, estadoReserva, precioTotal, null, null);
+        reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
         
         reservasDAO.crearReserva(reserva);
     }
@@ -130,19 +130,13 @@ public class ReservasView {
         int numeroNinos = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Ingrese la nueva fecha de reserva (YYYY-MM-DD HH:MM):");
-        LocalDateTime fechaReserva = this.fechaMinuto();
-
-        System.out.println("Ingrese el nuevo estado de la reserva:");
-        String estadoReserva = sc.nextLine();
-
-        System.out.println("Ingrese el nuevo precio total:");
-        double precioTotal = sc.nextDouble();
+        
         sc.nextLine();
 
-        Reservas reserva = new Reservas(id, dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos, fechaReserva, estadoReserva, precioTotal, null, null);
+        reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
         
-        reservasDAO.actualizarReserva(reserva);
+        
+        reservasDAO.actualizarReserva(reserva, id);
     }
     public void cancelarReserva() {
         System.out.println("Ingrese el ID de la reserva a cancelar:");
@@ -160,12 +154,8 @@ public class ReservasView {
         int id = sc.nextInt();
         sc.nextLine();
 
-        Reservas reserva = reservasDAO.consultarReserva(id);
-        if (reserva != null) {
-            System.out.println("Reserva encontrada: " + reserva);
-        } else {
-            System.out.println("No se encontró la reserva con ID: " + id);
-        }
+        reservasDAO.consultarReserva(id);
+        
     }
 
 }
