@@ -1,183 +1,216 @@
 package View;
-import Model.Clientes; // Importamos la clase Clientes (corregido)
-import Dao.ClienteDAO;
 
-import java.util.*;
+import Dao.ClienteDAO;
+import Model.Clientes;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class ClienteView {
 
-    // Atributos
-    Scanner sc = new Scanner(System.in);
-    Clientes cliente; // Usamos la clase Clientes (corregido)
-    ClienteDAO clienteDAO = new ClienteDAO();
-    ArrayList<Clientes> listaClientes; // Usamos la clase Clientes (corregido)
+    private Scanner scanner;
+    private Clientes cliente;
+    private ClienteDAO clienteDAO;
+    private ArrayList<Clientes> listaClientes;
 
+    public ClienteView() {
+        this.scanner = new Scanner(System.in);
+        this.clienteDAO = new ClienteDAO();
+        this.listaClientes = new ArrayList<>();
+    }
 
-    public void menuCliente(){
+    public void menuCliente() {
+        int opcion = -1;
+        do {
+            System.out.println("\n" + "=".repeat(35));
+            System.out.println("** Menú de Clientes **");
+            System.out.println("=".repeat(35));
+            System.out.println("1. [AÑADIR] Nuevo Cliente");
+            System.out.println("2. [MODIFICAR] Cliente");
+            System.out.println("3. [ELIMINAR] Cliente");
+            System.out.println("4. [VER] Clientes");
+            System.out.println("0. [VOLVER] Al menú principal");
+            System.out.print("Seleccione una opción: ");
+            try {
+                opcion = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Por favor, introduce un número como opción.");
+                scanner.next(); // Limpiar el buffer del scanner
+                opcion = -1; // Reiniciar la opción para que el bucle continúe
+                continue;
+            }
+            scanner.nextLine(); // Consumir la nueva línea después de leer el entero
+            System.out.println("-".repeat(35));
 
-        int opcion;
+            switch (opcion) {
+                case 1 -> añadirCliente();
+                case 2 -> modificarCliente();
+                case 3 -> eliminarCliente();
+                case 4 -> verClientes();
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> {
+                    if (opcion != -1) {
+                        System.out.println("Opción no válida. Intente nuevamente.");
+                    }
+                }
+            }
+        } while (opcion != 0);
+    }
 
-        System.out.println("Bienvenido al menu del cliente");
-        System.out.println("1. Añadir cliente");
-        System.out.println("2. Modificar cliente");
-        System.out.println("3. Eliminar cliente");
-        System.out.println("4. Ver clientes");
+    public void añadirCliente() {
+        System.out.println("\n--- Añadir Nuevo Cliente ---");
+        try {
+            System.out.print("DNI: ");
+            String dni = scanner.nextLine();
+            System.out.print("Nombre: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Apellido: ");
+            String apellido = scanner.nextLine();
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+            System.out.print("Teléfono: ");
+            String telefono = scanner.nextLine();
+            System.out.print("Dirección: ");
+            String direccion = scanner.nextLine();
+            cliente = new Clientes(dni, nombre, apellido, email, telefono, direccion);
 
-        opcion = sc.nextInt();
-        sc.nextLine();
+            clienteDAO.insertar(cliente);
+            System.out.println("Cliente añadido correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al añadir el cliente: " + e.getMessage());
+        }
+    }
 
-        switch (opcion){
-            case 1 -> { this.añadirCliente(); }
-            case 2 -> { this.modificarCliente(); }
-            case 3 -> { this.eliminarCliente(); }
-            case 4 -> { this.verClientes(); }
-            default -> { System.out.println("Opcion no valida"); }
+    public void modificarCliente() {
+        System.out.println("\n--- Modificar Cliente ---");
+        System.out.print("DNI del cliente a modificar: ");
+        String dni = scanner.nextLine();
+
+        if (clienteDAO.buscarPorDni(dni) == null) {
+            System.out.println("No se encontró ningún cliente con ese DNI.");
+            return;
         }
 
-
-    }
-
-
-    public void añadirCliente(){
-        System.out.println("Añadir cliente");
-        System.out.print("DNI: ");
-        String dni = sc.nextLine();
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
-        System.out.print("Apellido: ");
-        String apellido = sc.nextLine();
-        System.out.print("Email: ");
-        String email = sc.nextLine();
-        System.out.print("Telefono: ");
-        String telefono = sc.nextLine();
-        System.out.print("Direccion: ");
-        String direccion = sc.nextLine();
-        cliente = new Clientes(dni, nombre, apellido, email, telefono, direccion); // Usamos Clientes
-
-        clienteDAO.insertar(cliente);
-
-        System.out.println("Cliente añadido correctamente");
-
-    }
-
-    public void modificarCliente(){
-        System.out.print("DNI del cliente a modificar: ");
-        String dni = sc.nextLine();
-        String atributo = null;
-        int opcion2 ;
-
+        int opcion2 = -1;
         do {
-
-            System.out.println("Modificar cliente");
-            System.out.println("Qué quieres modificar?");
+            System.out.println("\n--- ¿Qué desea modificar del cliente con DNI " + dni + "? ---");
             System.out.println("1. Nombre");
             System.out.println("2. Apellido");
             System.out.println("3. Email");
-            System.out.println("4. Telefono");
-            System.out.println("5. Direccion");
+            System.out.println("4. Teléfono");
+            System.out.println("5. Dirección");
+            System.out.println("0. Volver al menú de clientes");
             System.out.print("Opción: ");
-            int opcion = sc.nextInt();
-            sc.nextLine();
-
-            switch (opcion){
-                case 1 -> { atributo = "Nombre"; }
-                case 2 -> { atributo = "Apellido"; }
-                case 3 -> { atributo = "Email"; }
-                case 4 -> { atributo = "Telefono"; }
-                case 5 -> { atributo = "Direccion"; }
-                default -> { System.out.println("Opción no válida");}
+            try {
+                opcion2 = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Por favor, introduce un número como opción.");
+                scanner.next(); // Limpiar el buffer
+                opcion2 = -1;
+                continue;
             }
+            scanner.nextLine(); // Consumir la nueva línea
+
+            String atributo = null;
+            System.out.print("Nuevo valor: ");
+            String valor = scanner.nextLine();
+
+            switch (opcion2) {
+                case 1 -> atributo = "Nombre";
+                case 2 -> atributo = "Apellido";
+                case 3 -> atributo = "Email";
+                case 4 -> atributo = "Telefono";
+                case 5 -> atributo = "Direccion";
+                case 0 -> System.out.println("Volviendo al menú de clientes.");
+                default -> {
+                    if (opcion2 != -1) {
+                        System.out.println("Opción no válida. Intente nuevamente.");
+                    }
+                }
+            }
+
             if (atributo != null) {
-                System.out.print("Nuevo valor para " + atributo + ": ");
-                String valor = sc.nextLine();
                 clienteDAO.actualizar(atributo, valor, dni);
-                System.out.println("Cliente modificado correctamente");
+                System.out.println("Cliente modificado correctamente.");
             }
-            System.out.println("Desea modificar otro dato del mismo cliente?");
-            System.out.println("1. Si");
-            System.out.println("2. No");
-            System.out.print("Opción: ");
-            opcion2 = sc.nextInt();
-            sc.nextLine();
-        } while (opcion2 == 1);
 
-        System.out.println("Saliendo del menu de modificar cliente");
+        } while (opcion2 != 0);
 
+        System.out.println("Saliendo del menú de modificar cliente.");
     }
 
+    public void eliminarCliente() {
+        System.out.println("\n--- Eliminar Cliente ---");
+        System.out.print("DNI del cliente a eliminar: ");
+        String dni = scanner.nextLine();
 
-    public void eliminarCliente(){
-        String dni;
-        int opcion;
+        if (clienteDAO.buscarPorDni(dni) == null) {
+            System.out.println("No se encontró ningún cliente con ese DNI.");
+            return;
+        }
 
-        do{
-            System.out.println("Eliminar cliente");
-            System.out.print("DNI del cliente a eliminar: ");
-            dni = sc.nextLine();
+        System.out.print("¿Seguro que desea eliminar el cliente con DNI " + dni + "? (Si/No): ");
+        String respuesta = scanner.nextLine();
+        if (respuesta.equalsIgnoreCase("Si")) {
             clienteDAO.eliminar(dni);
-
-
-            System.out.println("Desea eliminar otro cliente?");
-            System.out.println("1. Si");
-            System.out.println("2. No");
-            System.out.print("Opción: ");
-            opcion = sc.nextInt();
-            sc.nextLine();
-
-        }while (opcion == 1);
-        System.out.println("Saliendo del menu de eliminar cliente");
+            System.out.println("Cliente eliminado correctamente.");
+        } else {
+            System.out.println("Operación cancelada.");
+        }
+        System.out.println("Saliendo del menú de eliminar cliente.");
     }
 
-
-    public void verClientes(){
-
-        int opcion;
-        int opcion2;
-
-        System.out.println("Ver clientes");
-
-        do{
+    public void verClientes() {
+        int opcion = -1;
+        do {
+            System.out.println("\n--- Ver Clientes ---");
             System.out.println("1. Ver todos los clientes");
             System.out.println("2. Ver cliente por DNI");
+            System.out.println("0. Volver al menú de clientes");
             System.out.print("Opción: ");
-            opcion = sc.nextInt();
-            sc.nextLine();
+            try {
+                opcion = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Por favor, introduce un número como opción.");
+                scanner.next(); // Limpiar el buffer
+                opcion = -1;
+                continue;
+            }
+            scanner.nextLine(); // Consumir la nueva línea
 
-            switch (opcion){
-                case 1-> {
+            switch (opcion) {
+                case 1 -> {
                     listaClientes = clienteDAO.obtenerTodos();
                     if (listaClientes != null && !listaClientes.isEmpty()) {
-                        for (Clientes cliente : listaClientes) { // Usamos Clientes
-                            System.out.println(cliente.toString());
+                        System.out.println("\n--- Listado de Clientes ---");
+                        for (Clientes cliente : listaClientes) {
+                            System.out.println(cliente);
                         }
                     } else {
                         System.out.println("No hay clientes registrados.");
                     }
                 }
-                case 2-> {
-                    System.out.println("Introduce el DNI del cliente que quieres ver");
-                    System.out.print("DNI: ");
-                    String dni = sc.nextLine();
+                case 2 -> {
+                    System.out.println("\n--- Ver Cliente por DNI ---");
+                    System.out.print("Introduce el DNI del cliente: ");
+                    String dni = scanner.nextLine();
                     cliente = clienteDAO.buscarPorDni(dni);
                     if (cliente != null) {
-                        System.out.println(cliente.toString());
+                        System.out.println(cliente);
                     } else {
                         System.out.println("No se encontró ningún cliente con ese DNI.");
                     }
                 }
+                case 0 -> System.out.println("Volviendo al menú de clientes.");
                 default -> System.out.println("Opción no válida.");
             }
-
-            System.out.println("Desea ver otro cliente?");
-            System.out.println("1. Si");
-            System.out.println("2. No");
-            System.out.print("Opción: ");
-            opcion2 = sc.nextInt();
-            sc.nextLine();
-
-
-        }while (opcion2 == 1);
-        System.out.println("Saliendo del menu de ver clientes");
+        } while (opcion != 0);
+        System.out.println("Saliendo del menú de ver clientes.");
     }
 
+    public void cerrarScanner() {
+        if (scanner != null) {
+            scanner.close();
+        }
+    }
 }
