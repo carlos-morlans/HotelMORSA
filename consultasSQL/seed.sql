@@ -7,7 +7,7 @@ CREATE TABLE Habitaciones (
 );
 
 CREATE TABLE Empleados (
-    EmpleadoDni VARCHAR(20) PRIMARY KEY,
+    EmpleadoDni VARCHAR(20) PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(100) NOT NULL,
     Apellido VARCHAR(100) NOT NULL,
     Puesto VARCHAR(100) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE HistorialPagos (
     HistorialPagoID INT PRIMARY KEY AUTO_INCREMENT,
     Cuantia DECIMAL(10, 2) NOT NULL,
     Fecha DATE NOT NULL,
-    Concepto VARCHAR(50) NOT NULL,
+    Concepto VARCHAR(20) NOT NULL,
     ReservaID INT,
     EmpleadoDni VARCHAR(20) NULL,  
     FOREIGN KEY (ReservaID) REFERENCES Reservas(ReservaID) ON DELETE CASCADE,
