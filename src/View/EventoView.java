@@ -1,10 +1,10 @@
 package View;
 
-import java.util.ArrayList;
-import java.util.Scanner;
 import Dao.EventosDAO;
 import Model.Eventos;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class EventoView {
@@ -129,10 +129,10 @@ public class EventoView {
         nombre = sc.nextLine();sc.next();
 
         System.out.println("fecha");
-        fecha =  sc.nextLine();sc.next();
+        fecha = Date.valueOf(sc.nextLine());
 
         System.out.println("Hora");
-        hora = sc.nextTime();
+        hora = Time.valueOf(sc.nextLine());
 
         System.out.println("Precio");
         precio = sc.nextDouble();

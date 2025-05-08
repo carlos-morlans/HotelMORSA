@@ -1,20 +1,19 @@
 package Dao;
 
+import Model.Eventos;
 import java.sql.*;
 import java.util.ArrayList;
-
-import Model.Eventos;
 
 public class EventosDAO {
     public void insertar(Eventos evento) {
         Connection conexion = ConexionDB.conectar();
+        java.util.Date fechaEvento = evento.getFechaEvento();
         if (conexion != null) {
             String query = "INSERT INTO Eventos (EventoID, NombreEvento, FechaEvento, HoraInicio, Precio, Capacidad) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                 stmt.setInt(1, evento.getEventoID()); // Asigna el valor del teléfono
                 stmt.setString(2, evento.getNombreEvento()); 
-                stmt.setDate(3, evento.getFechaEvento());
-                stmt.setTime(4, evento.getHoraInicio());
+                stmt.setDate(3, new java.sql.Date(fechaEvento.getTime()));                stmt.setTime(4, evento.getHoraInicio());
                 stmt.setDouble(5, evento.getPrecio());
                 stmt.setInt(6, evento.getCapacidad());
                 
