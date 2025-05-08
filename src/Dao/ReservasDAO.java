@@ -45,7 +45,7 @@ public class ReservasDAO {
 
     public void actualizarReserva(Reservas reserva) {
         String query = "UPDATE Reservas SET ClienteDni = ?, NumeroHabitacion = ?, FechaEntrada = ?, FechaSalida = ?, NumeroAdultos = ?, NumeroNinos = ?, FechaReserva = ?, EstadoReserva = ?, PrecioTotal = ?, FechaCancelacion = ?, MotivoCancelacion = ? WHERE ReservaID = ?";
-
+        
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, reserva.getClienteDni());
             stmt.setInt(2, reserva.getNumeroHabitacion());
