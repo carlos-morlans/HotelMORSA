@@ -1,11 +1,10 @@
 package View;
 
-import java.util.Scanner;
-import Model.Reservas;
 import Dao.ReservasDAO;
-import java.time.LocalDateTime;
+import Model.Reservas;
 import java.time.LocalDate;
-import View.HabitacionesView;
+import java.time.LocalDateTime;
+import java.util.Scanner;
 
 public class ReservasView {
 
@@ -15,7 +14,7 @@ public class ReservasView {
 
     Reservas reserva;
 
-    HabitacionesView habitacion;
+    HabitacionesView habitacion = new HabitacionesView();
 
     public void menuReservas() {
 
@@ -52,7 +51,7 @@ public class ReservasView {
         habitacion.listarHabitaciones();
 
 
-        
+
         System.out.println("Ingrese el número de habitación:");
         int numeroHabitacion = sc.nextInt();
         sc.nextLine();
