@@ -9,7 +9,30 @@ import java.sql.*;
 
 public class EventoView {
 
-    public void gestionarCliente() {
+    public void menuEventos() {
+
+        Scanner sc = new Scanner(System.in);
+        int opcion;
+
+        System.out.println("Menu de Empleados: ");
+        System.out.println("1.Buscar por id");
+        System.out.println("2.Modificar Evento");
+        System.out.println("3.Añadir Evento");
+        System.out.println("4.Eliminar Evento");
+
+        opcion = sc.nextInt();
+        sc.nextLine();
+
+        switch(opcion){
+            case 1: {this.buscarID();} break;
+            case 2: {this.gestionarEventos();} break;
+            case 3: {this.crearEventos();} break;
+            case 4: {this.eventosMostrar();} break;
+            default: System.out.println("Opción no válida"); break;
+        }
+    }
+
+    public void gestionarEventos() {
 
         EventosDAO evdao = new EventosDAO();
         Scanner sc = new Scanner(System.in);
@@ -86,7 +109,7 @@ public class EventoView {
         
     }
 
-    public void crearCliente() {
+    public void crearEventos() {
         EventosDAO evdao = new EventosDAO();
         Scanner sc = new Scanner(System.in);
         String nombre;
@@ -121,7 +144,7 @@ public class EventoView {
         evdao.insertar(evento);
     }
 
-    public void eliminarCliente() {
+    public void eliminarEventos() {
 
         Scanner sc = new Scanner(System.in);
         EventosDAO evdao = new EventosDAO();
@@ -171,6 +194,30 @@ public class EventoView {
         }else {
             System.out.println("¿Otra vez intentando conseguir cosas que no existen?");
             
+        }
+    }
+
+    public void buscarID(){
+        Scanner sc = new Scanner(System.in);
+        EventosDAO evdao = new EventosDAO();
+        Eventos evento;
+        
+        System.out.println("ID del evento a buscar: ");
+        int id = sc.nextInt();
+        evento = evdao.buscarPorID(id);
+
+        if (evento !=null){
+
+            System.out.println("Empleado encontrado: ");
+            System.out.println("ID: " + evento.getEventoID());
+            System.out.println("Nombre: " + evento.getNombreEvento());
+            System.out.println("Fecha: " + evento.getFechaEvento());
+            System.out.println("Hora: " + evento.getHoraInicio());
+            System.out.println("Precio: " + evento.getPrecio());
+            System.out.println("Capacidad: " + evento.getCapacidad());
+               
+        }else{
+            System.out.println("No se ha encontrado ningun evento con ese ID");
         }
     }
 }
