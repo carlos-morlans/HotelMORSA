@@ -11,6 +11,12 @@ public class App {
 
         do {
             System.out.println("1.Gestionar");
+
+            switch(opcion) {
+                case 1 -> {
+                    
+                }
+            }
             
 
         } while (opcion != 5);

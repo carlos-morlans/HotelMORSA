@@ -3,6 +3,7 @@ import java.util.*;
 
 import model.Garaje;
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -14,6 +15,13 @@ public class GestionHotel {
     private List<Cliente> clientes;
     private List<Trabajador> trabajadores;
     private Scanner scanner;
+
+
+
+    public void menus() {
+        GarajeView.mostrarMenuGaraje();
+    }
+
 
     public GestionHotel() {
         habitaciones = new ArrayList<>();
