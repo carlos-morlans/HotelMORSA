@@ -57,10 +57,10 @@ public class ReservasView {
         int numeroHabitacion = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Ingrese la fecha de entrada (YYYY-MM-DD):");
+        System.out.println("Ingrese la fecha de entrada:");
         LocalDate fechaEntrada = this.fechaDia();
 
-        System.out.println("Ingrese la fecha de salida (YYYY-MM-DD):");
+        System.out.println("Ingrese la fecha de salida:");
         LocalDate fechaSalida = this.fechaDia();
 
         System.out.println("Ingrese el número de adultos:");
@@ -116,10 +116,10 @@ public class ReservasView {
         int numeroHabitacion = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Ingrese la nueva fecha de entrada (YYYY-MM-DD):");
+        System.out.println("Ingrese la nueva fecha de entrada:");
         LocalDate fechaEntrada = this.fechaDia();
 
-        System.out.println("Ingrese la nueva fecha de salida (YYYY-MM-DD):");
+        System.out.println("Ingrese la nueva fecha de salida:");
         LocalDate fechaSalida = this.fechaDia();
 
         System.out.println("Ingrese el nuevo número de adultos:");
