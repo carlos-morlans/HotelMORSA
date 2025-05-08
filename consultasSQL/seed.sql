@@ -123,9 +123,9 @@ DELIMITER //
         DECLARE precioTotal VARCHAR(20);
 
         -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-        SET dias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
+        SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
 
-        SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion
+        SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
 
         -- Se asigna el valor a la variable precioTotal y se calcula el precio total
         SET precioTotal = precioNoche * dias;
