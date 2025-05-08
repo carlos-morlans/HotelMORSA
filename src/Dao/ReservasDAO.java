@@ -33,6 +33,8 @@ public class ReservasDAO {
             
             stmt.setInt(5, reserva.getNumeroAdultos());
             stmt.setInt(6, reserva.getNumeroNinos());
+
+            stmt.setString(7, "Ingreso");
             
             stmt.execute();
         } catch (SQLException e) {
