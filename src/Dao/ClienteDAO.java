@@ -19,7 +19,7 @@ public class ClienteDAO {
                 stmt = conexion.prepareStatement(query);
                 stmt.setString(1, cliente.getClienteDni()); // Asigna el DNI
                 stmt.setString(2, cliente.getNombre()); // Usamos getNombre()
-                stmt.setString(3, cliente.getApellido()); // Usamos getApellido()
+                stmt.setString(3, cliente.getApellidos()); // Usamos getApellido()
                 stmt.setString(4, cliente.getEmail());
                 stmt.setString(5, cliente.getTelefono());
                 stmt.setString(6, cliente.getDireccion());
