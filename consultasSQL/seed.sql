@@ -103,45 +103,42 @@ CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
 -- Procedimiento para calcular el precio total y dias de una reserva
 DELIMITER //
 
-    CREATE Procedure CalcularReserva(
-        IN p_ClienteDni VARCHAR(20),
-        IN p_numeroHabitacion INT,
-        IN p_fechaEntrada DATE,
-        IN p_fechaSalida DATE,
-        IN p_numeroAdultos INT,
-        IN p_numeroNinos INT,
+CREATE Procedure CalcularReserva(
+    IN p_ClienteDni VARCHAR(20),
+    IN p_numeroHabitacion INT,
+    IN p_fechaEntrada DATE,
+    IN p_fechaSalida DATE,
+    IN p_numeroAdultos INT,
+    IN p_numeroNinos INT
+)
+BEGIN
+    -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
+    DECLARE numDias DECIMAL(10,2);
+    DECLARE precioNoche DECIMAL(10,2);
+    DECLARE precioTotal DECIMAL(10,2); -- Cambiado a DECIMAL(10, 2)
 
-    )
-    BEGIN 
-        -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
-        DECLARE numDias DECIMAL(10,2);
-        DECLARE precioNoche DECIMAL(10,2);
-        DECLARE precioTotal VARCHAR(20);
+    -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
+    SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
 
-        -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-        SET dias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
+    SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
 
-        SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion
+    -- Se asigna el valor a la variable precioTotal y se calcula el precio total
+    SET precioTotal = precioNoche * numDias;
 
-        -- Se asigna el valor a la variable precioTotal y se calcula el precio total
-        SET precioTotal = precioNoche * dias;
-        
-        -- Se inserta la reserva en la tabla de Reservas
-        INSERT INTO Reservas (
-            clienteDni, numeroHabitacion, fechaEntrada, fechaSalida,
-            numeroAdultos, numeroNinos, fechaReserva, estadoReserva, precioTotal
- 
-        -- NOW() completa automaticamente la columna fechaResrerva con la fecha y hora en la que se hizo la reserva
-        )VALUES (
-            p_clienteDni, p_numeroHabitacion, p_fechaEntrada, p_fechaSalida,
-            p_numeroAdultos, p_numeroNinos, NOW(), 'Confirmada', precioTotal
-        );
+    -- Se inserta la reserva en la tabla de Reservas
+    INSERT INTO Reservas (
+        clienteDni, numeroHabitacion, fechaEntrada, fechaSalida,
+        numeroAdultos, numeroNinos, fechaReserva, estadoReserva, precioTotal
+    )VALUES (
+        p_ClienteDni, p_numeroHabitacion, p_fechaEntrada, p_fechaSalida,
+        p_numeroAdultos, p_numeroNinos, NOW(), 'Confirmada', precioTotal
+    );
 
-        -- Se actualiza el estado de la habitación a ocupada
-        UPDATE Habitaciones
-        SET estado = 'Ocupada'
-        WHERE numeroHabitacion = p_numeroHabitacion;
-        
-    END //
+    -- Se actualiza el estado de la habitación a ocupada
+    UPDATE Habitaciones
+    SET estado = 'Ocupada'
+    WHERE numeroHabitacion = p_numeroHabitacion;
+
+END //
 
 DELIMITER ;
