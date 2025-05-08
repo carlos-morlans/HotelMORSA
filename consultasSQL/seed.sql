@@ -142,26 +142,27 @@
         UPDATE Habitaciones
         SET Estado = 'Ocupada'
         WHERE NumeroHabitacion = NEW.NumeroHabitacion;
-    END;
+    END//
 
-    //
     DELIMITER ;
 
     -- Actualización del estado de la habitación al cancelar una reserva:
     DELIMITER //
 
-    CREATE TRIGGER actualizar_estado_habitacion_al_cancelar
+    CREATE TRIGGER gestion_cancelacion_reserva
     AFTER UPDATE ON Reservas
     FOR EACH ROW
     BEGIN
-        IF NEW.EstadoReserva = 'Cancelada' AND NEW.FechaCancelacion IS NOT NULL THEN
+        IF NEW.EstadoReserva = 'Cancelada' AND OLD.EstadoReserva <> 'Cancelada' THEN
+            -- Actualizar el estado de la habitación a 'Disponible'
             UPDATE Habitaciones
             SET Estado = 'Disponible'
             WHERE NumeroHabitacion = NEW.NumeroHabitacion;
+
+            -- Registrar el reembolso en HistorialPagos
+            INSERT INTO HistorialPagos (ReservaID, Cuantia, Fecha, Concepto)
+            VALUES (NEW.ReservaID, -NEW.PrecioTotal, CURDATE(), 'Reembolso');
         END IF;
-    END;
+    END//
 
-    //
     DELIMITER ;
-
-    
