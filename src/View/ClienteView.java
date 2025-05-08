@@ -1,5 +1,5 @@
 package View;
-import Model.Cliente; // Importamos la clase Cliente (ahora corregida en Model)
+import Model.Clientes; // Importamos la clase Clientes (corregido)
 import Dao.ClienteDAO;
 
 import java.util.*;
@@ -8,9 +8,9 @@ public class ClienteView {
 
     // Atributos
     Scanner sc = new Scanner(System.in);
-    Cliente cliente;
+    Clientes cliente; // Usamos la clase Clientes (corregido)
     ClienteDAO clienteDAO = new ClienteDAO();
-    ArrayList<Cliente> listaClientes;
+    ArrayList<Clientes> listaClientes; // Usamos la clase Clientes (corregido)
 
 
     public void menuCliente(){
@@ -52,7 +52,7 @@ public class ClienteView {
         String telefono = sc.nextLine();
         System.out.print("Direccion: ");
         String direccion = sc.nextLine();
-        cliente = new Cliente(dni, nombre, apellido, email, telefono, direccion);
+        cliente = new Clientes(dni, nombre, apellido, email, telefono, direccion); // Usamos Clientes
 
         clienteDAO.insertar(cliente);
 
@@ -147,7 +147,7 @@ public class ClienteView {
                 case 1-> {
                     listaClientes = clienteDAO.obtenerTodos();
                     if (listaClientes != null && !listaClientes.isEmpty()) {
-                        for (Cliente cliente : listaClientes) {
+                        for (Clientes cliente : listaClientes) { // Usamos Clientes
                             System.out.println(cliente.toString());
                         }
                     } else {

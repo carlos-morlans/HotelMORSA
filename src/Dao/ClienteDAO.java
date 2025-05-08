@@ -1,5 +1,5 @@
 package Dao;
-import Model.Cliente; // Importamos la clase Cliente (ahora corregida en Model)
+import Model.Clientes; // Importamos la clase Clientes (corregido)
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ClienteDAO {
 
-    public void insertar(Cliente cliente) {
+    public void insertar(Clientes cliente) { // Usamos Clientes
         Connection conexion = null; // Inicializamos a null
         PreparedStatement stmt = null;
         try {
@@ -17,9 +17,9 @@ public class ClienteDAO {
             if (conexion != null) {
                 String query = "INSERT INTO Clientes (ClienteDni, Nombre, Apellido, Email, Telefono, Direccion) VALUES (?, ?, ?, ?, ?, ?)";
                 stmt = conexion.prepareStatement(query);
-                stmt.setString(1, cliente.getDni()); // Asigna el DNI
-                stmt.setString(2, cliente.getNombre());
-                stmt.setString(3, cliente.getApellido());
+                stmt.setString(1, cliente.getClienteDni()); // Asigna el DNI
+                stmt.setString(2, cliente.getNombre()); // Usamos getNombre()
+                stmt.setString(3, cliente.getApellido()); // Usamos getApellido()
                 stmt.setString(4, cliente.getEmail());
                 stmt.setString(5, cliente.getTelefono());
                 stmt.setString(6, cliente.getDireccion());
@@ -94,11 +94,11 @@ public class ClienteDAO {
         }
     }
 
-    public Cliente buscarPorDni(String dni){
+    public Clientes buscarPorDni(String dni){ // Usamos Clientes
         Connection conexion = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Cliente cliente = null;
+        Clientes cliente = null; // Usamos Clientes
 
         try {
             conexion = ConexionDB.conectar();
@@ -111,13 +111,13 @@ public class ClienteDAO {
 
                 if (rs.next()) {
                     String nombre = rs.getString("Nombre");
-                    String apellidos = rs.getString("Apellido");
+                    String apellido = rs.getString("Apellido"); // Correcto nombre de la columna
                     String clienteDni = rs.getString("ClienteDni");
                     String direccion = rs.getString("Direccion");
                     String telefono = rs.getString("Telefono"); // Correcto nombre de la columna
                     String email = rs.getString("Email");
 
-                    cliente = new Cliente(clienteDni, nombre, apellidos, email, telefono, direccion);
+                    cliente = new Clientes(clienteDni, nombre, apellido, email, telefono, direccion); // Usamos Clientes
                 }
             } else {
                 System.out.println("No se ha podido conectar con la base de datos para buscar.");
@@ -135,16 +135,16 @@ public class ClienteDAO {
         return cliente;
     }
 
-    public ArrayList<Cliente> obtenerTodos() {
+    public ArrayList<Clientes> obtenerTodos() { // Usamos Clientes
         Connection conexion = null;
         Statement stmt = null;
         ResultSet rs = null;
-        ArrayList<Cliente> clientes = new ArrayList<>();
+        ArrayList<Clientes> clientes = new ArrayList<>(); // Usamos Clientes
 
         try {
             conexion = ConexionDB.conectar();
             if (conexion != null) {
-                // Consulta SQL para obtener todos los Cliente
+                // Consulta SQL para obtener todos los Clientes
                 String query = "SELECT ClienteDni, Nombre, Apellido, Email, Telefono, Direccion FROM Clientes";
                 stmt = conexion.createStatement();
                 rs = stmt.executeQuery(query);
@@ -154,10 +154,10 @@ public class ClienteDAO {
                     String clienteDni = rs.getString("ClienteDni");
                     String nombre = rs.getString("Nombre");
                     String telefono = rs.getString("Telefono");
-                    String apellidos = rs.getString("Apellido");
+                    String apellido = rs.getString("Apellido"); // Correcto nombre de la columna
                     String direccion = rs.getString("Direccion");
                     String email = rs.getString("Email");
-                    Cliente cliente = new Cliente(clienteDni, nombre, apellidos, email, telefono, direccion);
+                    Clientes cliente = new Clientes(clienteDni, nombre, apellido, email, telefono, direccion); // Usamos Clientes
                     clientes.add(cliente);
                 }
             } else {
