@@ -120,7 +120,7 @@ DELIMITER //
         -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
         DECLARE numDias DECIMAL(10,2);
         DECLARE precioNoche DECIMAL(10,2);
-        DECLARE precioTotal VARCHAR(20);
+        DECLARE precioTotal DECIMAL(10,2);
 
         -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
         SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
@@ -128,7 +128,7 @@ DELIMITER //
         SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
 
         -- Se asigna el valor a la variable precioTotal y se calcula el precio total
-        SET precioTotal = precioNoche * dias;
+        SET precioTotal = precioNoche * numDias;
         
         -- Se inserta la reserva en la tabla de Reservas
         INSERT INTO Reservas (
