@@ -81,13 +81,15 @@ CREATE Procedure CalcularReserva(
     IN p_fechaEntrada DATE,
     IN p_fechaSalida DATE,
     IN p_numeroAdultos INT,
-    IN p_numeroNinos INT
+    IN p_numeroNinos INT,
+    IN p_concepto VARCHAR(20) -- 'Ingreso', 'Gasto', 'Reembolso'
 )
 BEGIN
     -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
     DECLARE numDias DECIMAL(10,2);
     DECLARE precioNoche DECIMAL(10,2);
     DECLARE precioTotal DECIMAL(10,2); 
+    DECLARE nuevaReservaID INT;
 
     -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
     SET numDias = DATEDIFF(p_fechaEntrada, p_fechaSalida);
@@ -105,6 +107,18 @@ BEGIN
         p_ClienteDni, p_numeroHabitacion, p_fechaEntrada, p_fechaSalida,
         p_numeroAdultos, p_numeroNinos, NOW(), 'Confirmada', precioTotal
     );
+    
+    -- Obtener el ID de la reserva nueva
+    SET nuevaReservaID = LAST_INSERT_ID();
+
+    INSERT INTO HistorialPagos(reservaID, cuantia, fecha, concepto)
+    VALUES (nuevaReservaID, precioTotal, NOW(), p_concepto);
+
+    INSERT INTO Pagos (reservaID, fechaPago, monto)
+    VALUES (nuevaReservaID, NOW(), precioTotal, );
+    
+
+    
 
     -- Se actualiza el estado de la habitación a ocupada
     UPDATE Habitaciones
