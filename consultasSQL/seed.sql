@@ -75,51 +75,6 @@ CREATE INDEX idx_NumeroHabitacion ON Habitaciones (NumeroHabitacion);
 -- Índice para la tabla Garaje
 CREATE INDEX idx_Estado ON Garaje (Estado);
 
--- Procedimiento para calcular el precio total y dias de una reserva
-DELIMITER //
-
-
-    CREATE Procedure CalcularReserva(
-        IN p_ClienteDni VARCHAR(20),
-        IN p_numeroHabitacion INT,
-        IN p_fechaEntrada DATE,
-        IN p_fechaSalida DATE,
-        IN p_numeroAdultos INT,
-        IN p_numeroNinos INT,
-
-    )
-    BEGIN 
-        -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
-        DECLARE numDias DECIMAL(10,2);
-        DECLARE precioNoche DECIMAL(10,2);
-        DECLARE precioTotal DECIMAL(10,2);
-
-        -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-        SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
-
-        SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
-
-        -- Se asigna el valor a la variable precioTotal y se calcula el precio total
-        SET precioTotal = precioNoche * numDias;
-        
-        -- Se inserta la reserva en la tabla de Reservas
-        INSERT INTO Reservas (
-            clienteDni, numeroHabitacion, fechaEntrada, fechaSalida,
-            numeroAdultos, numeroNinos, fechaReserva, estadoReserva, precioTotal
- 
-        -- NOW() completa automaticamente la columna fechaResrerva con la fecha y hora en la que se hizo la reserva
-        )VALUES (
-            p_clienteDni, p_numeroHabitacion, p_fechaEntrada, p_fechaSalida,
-            p_numeroAdultos, p_numeroNinos, NOW(), 'Confirmada', precioTotal
-        );
-
-        -- Se actualiza el estado de la habitación a Ocupada
-        UPDATE Habitaciones
-        SET estado = 'Ocupada'
-        WHERE numeroHabitacion = p_numeroHabitacion;
-        
-    END //
-
 CREATE Procedure CalcularReserva(
     IN p_ClienteDni VARCHAR(20),
     IN p_numeroHabitacion INT,
