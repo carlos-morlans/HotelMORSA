@@ -2,101 +2,158 @@ package View;
 
 import Dao.GarajeDAO;
 import Model.Garaje;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class GarajeView {
-    
-    Garaje nuevogaraje;
-    GarajeDAO garajeDAO = new GarajeDAO();
-    
+
+    private Scanner scanner;
+    private GarajeDAO garajeDAO;
+
+    public GarajeView() {
+        this.scanner = new Scanner(System.in);
+        this.garajeDAO = new GarajeDAO();
+    }
+
     public void mostrarMenuGaraje() {
+        int opcion = -1;
+        do {
+            System.out.println("\n" + "=".repeat(35));
+            System.out.println("** Menú de Garaje **");
+            System.out.println("=".repeat(35));
+            System.out.println("1. [CREAR] Nueva Plaza");
+            System.out.println("2. [MODIFICAR] Plaza");
+            System.out.println("3. [BUSCAR] Plaza por Número");
+            System.out.println("4. [ELIMINAR] Plaza");
+            System.out.println("0. [VOLVER] Al menú principal");
+            System.out.print("Seleccione una opción: ");
+            try {
+                opcion = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Por favor, introduce un número como opción.");
+                scanner.next(); // Limpiar el scanner
+                opcion = -1;    // Para que el bucle continúe
+                continue;
+            }
+            scanner.nextLine(); // Consumir la nueva línea pendiente
+            System.out.println("-".repeat(35));
 
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Menu de Garaje: ");
-        System.out.println("1.Crear Plaza");
-        System.out.println("2.Modificar Plaza");
-        System.out.println("3.Buscar por numero de Plaza");
-        System.out.println("4.Eliminar Empleado");
-
-        int opcion = sc.nextInt();
-        sc.nextLine();
-
-        switch(opcion){
-            case 1: {this.crearPlaza();} break;
-            case 2: {this.modificarPlaza();} break;
-            case 3: {this.BuscarPorPlaza();} break;
-            case 4: {this.eliminarPlaza();} break;
-            default: System.out.println("Opción no válida"); break;
-        }
+            switch (opcion) {
+                case 1 -> crearPlaza();
+                case 2 -> modificarPlaza();
+                case 3 -> buscarPorPlaza();
+                case 4 -> eliminarPlaza();
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> {
+                    if (opcion != -1) {
+                        System.out.println("Opción no válida. Intente nuevamente.");
+                    }
+                }
+            }
+        } while (opcion != 0);
     }
 
     public void crearPlaza() {
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Crear Nueva Plaza ---");
+        try {
+            System.out.print("Introduce el Número de Plaza: ");
+            int numeroPlaza = scanner.nextInt();
+            scanner.nextLine(); // Consumir la nueva línea pendiente
+            System.out.print("Introduce el estado de la plaza (ocupado/libre): ");
+            String estado = scanner.nextLine();
 
-        System.out.println("  Introduce el Numero de Plaza: ");
-        int numeroPlaza = scanner.nextInt();
-
-        System.out.println("  Introduce el estado de la plaza: ");
-        String estado = scanner.nextLine();
-
-        Garaje nuevogaraje = new Garaje(numeroPlaza, estado);
- 
-        garajeDAO.insertar(nuevogaraje);
- 
-        System.out.println("Plaza creada correctamente");
-
-
-    }
-
-    public void modificarPlaza(){
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Modificar plaza");
-        System.out.print("Numero de plaza: ");
-        int numeroPlaza = sc.nextInt();
-        System.out.println("1.estado");
-
-        System.out.println("  Introduce el nuevo esttado: (ocuapado/libre)");
-        String estado = sc.nextLine();
-        garajeDAO.modificarEstado(numeroPlaza, estado);
-        System.out.println("estado modificado correctamente.");
-                
-        System.out.println("Desea modificar otro dato?");
-        System.out.println("1. Si");
-        System.out.println("2. No");
-        int opcion = sc.nextInt();
-        switch(opcion){
-            case 1: {this.modificarPlaza();} break;
-            case 2: {this.mostrarMenuGaraje();} break;
-            default: System.out.println("Opción no válida"); break;
+            Garaje nuevaGaraje = new Garaje(numeroPlaza, estado);
+            garajeDAO.insertar(nuevaGaraje);
+            System.out.println("Plaza creada correctamente.");
+        } catch (InputMismatchException e) {
+            System.out.println("Error: El número de plaza debe ser un valor numérico.");
+            scanner.next(); // Limpiar el scanner
         }
     }
 
-    public void BuscarPorPlaza(){
-        Scanner sc = new Scanner(System.in);
+    public void modificarPlaza() {
+        System.out.println("\n--- Modificar Plaza ---");
+        try {
+            System.out.print("Número de plaza a modificar: ");
+            int numeroPlaza = scanner.nextInt();
+            scanner.nextLine(); // Consumir la nueva línea pendiente
 
-        System.out.println("Escribe el numero de la plaza que quieres buscar: ");
-        int numeroPlaza = sc.nextInt();
-        garajeDAO.buscarPlaza(numeroPlaza);
+            int opcionModificar = -1;
+            do {
+                System.out.println("\n--- ¿Qué desea modificar de la plaza " + numeroPlaza + "? ---");
+                System.out.println("1. Estado (ocupado/libre)");
+                System.out.println("0. Volver al menú de garaje");
+                System.out.print("Seleccione una opción: ");
+                try {
+                    opcionModificar = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Error: Por favor, introduce un número como opción.");
+                    scanner.next(); // Limpiar el scanner
+                    opcionModificar = -1;
+                    continue;
+                }
+                scanner.nextLine(); // Consumir la nueva línea pendiente
 
+                switch (opcionModificar) {
+                    case 1:
+                        System.out.print("Introduce el nuevo estado de la plaza (ocupado/libre): ");
+                        String nuevoEstado = scanner.nextLine();
+                        garajeDAO.modificarEstado(numeroPlaza, nuevoEstado);
+                        System.out.println("Estado de la plaza modificado correctamente.");
+                        break;
+                    case 0:
+                        System.out.println("Volviendo al menú de garaje.");
+                        break;
+                    default:
+                        if (opcionModificar != -1) {
+                            System.out.println("Opción no válida. Intente nuevamente.");
+                        }
+                }
+            } while (opcionModificar != 0);
+
+        } catch (InputMismatchException e) {
+            System.out.println("Error: El número de plaza debe ser un valor numérico.");
+            scanner.next(); // Limpiar el scanner
+        }
     }
 
-    public void eliminarPlaza(){
+    public void buscarPorPlaza() {
+        System.out.println("\n--- Buscar Plaza por Número ---");
+        try {
+            System.out.print("Escribe el número de la plaza que quieres buscar: ");
+            int numeroPlaza = scanner.nextInt();
+            garajeDAO.buscarPlaza(numeroPlaza);
+            scanner.nextLine(); // Consumir la nueva línea pendiente
+        } catch (InputMismatchException e) {
+            System.out.println("Error: El número de plaza debe ser un valor numérico.");
+            scanner.next(); // Limpiar el scanner
+        }
+    }
 
-        Scanner sc = new Scanner(System.in);
-        
-        System.out.println("Eliminar plaza.");
-        System.out.println("Escribe el numero de la plaza que queires eliminar: ");
-        int numeroPlaza = sc.nextInt();
+    public void eliminarPlaza() {
+        System.out.println("\n--- Eliminar Plaza ---");
+        try {
+            System.out.print("Escribe el número de la plaza que quieres eliminar: ");
+            int numeroPlaza = scanner.nextInt();
+            scanner.nextLine(); // Consumir la nueva línea pendiente
 
-        System.out.println("¿Seguro que quieres eliminar este empleado (Si/No)?");
-        String respuesta = sc.nextLine();
-        if (respuesta.equalsIgnoreCase("Si")) {
-            garajeDAO.eliminarPlazaGaraje(numeroPlaza);
-            System.out.println("Empleado eliminado.");
-        }else{
-            System.out.println("Operacion cancelada");
+            System.out.print("¿Seguro que quieres eliminar esta plaza (Si/No)? ");
+            String respuesta = scanner.nextLine();
+            if (respuesta.equalsIgnoreCase("Si")) {
+                garajeDAO.eliminarPlazaGaraje(numeroPlaza);
+                System.out.println("Plaza eliminada.");
+            } else {
+                System.out.println("Operación cancelada.");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: El número de plaza debe ser un valor numérico.");
+            scanner.next(); // Limpiar el scanner
+        }
+    }
+
+    public void cerrarScanner() {
+        if (scanner != null) {
+            scanner.close();
         }
     }
 }
