@@ -69,36 +69,11 @@ CREATE TABLE Eventos (
     Capacidad INT
 );
 
--- Índices para la tabla Habitaciones
-CREATE INDEX idx_TipoHabitacion ON Habitaciones (TipoHabitacion);
-CREATE INDEX idx_PrecioNoche ON Habitaciones (PrecioNoche);
-CREATE INDEX idx_Estado ON Habitaciones (Estado);
-
--- Índices para la tabla Empleados
-CREATE INDEX idx_ApellidoEmpleado ON Empleados (Apellido);
-CREATE INDEX idx_PuestoEmpleado ON Empleados (Puesto);
-
--- Índices para la tabla Clientes
-CREATE INDEX idx_apellido_cliente ON Clientes (Apellido);
-
--- Índices para la tabla Reservas
-CREATE INDEX idx_ClienteDni ON Reservas (ClienteDni);
-CREATE INDEX idx_FechasReserva ON Reservas (FechaEntrada, FechaSalida);
-CREATE INDEX idx_NumeroHabitacion ON Reservas (NumeroHabitacion);
-CREATE INDEX idx_EstadoReserva ON Reservas (EstadoReserva);
+-- Índice para la tabla Habitaciones
+CREATE INDEX idx_NumeroHabitacion ON Habitaciones (NumeroHabitacion);
 
 -- Índice para la tabla Garaje
 CREATE INDEX idx_Estado ON Garaje (Estado);
-
--- Índices para la tabla HistorialPagos
-CREATE INDEX idx_fecha ON HistorialPagos (Fecha);
-CREATE INDEX idx_reserva_id ON HistorialPagos (ReservaID);
-CREATE INDEX idx_empleado_dni ON HistorialPagos (EmpleadoDni);
-
--- Índices para la tabla Eventos
-CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
-CREATE INDEX idx_NombreEvento ON Eventos (NombreEvento);
-CREATE INDEX idx_FechaEvento ON Eventos (FechaEvento);
 
 -- Procedimiento para calcular el precio total y dias de una reserva
 DELIMITER //
@@ -115,10 +90,10 @@ BEGIN
     -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
     DECLARE numDias DECIMAL(10,2);
     DECLARE precioNoche DECIMAL(10,2);
-    DECLARE precioTotal DECIMAL(10,2); -- Cambiado a DECIMAL(10, 2)
+    DECLARE precioTotal DECIMAL(10,2); 
 
     -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-    SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
+    SET numDias = DATEDIFF(p_fechaEntrada, p_fechaSalida);
 
     SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
 
