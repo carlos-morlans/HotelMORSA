@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class EventoView {
 
@@ -122,27 +123,23 @@ public class EventoView {
                     case 1:
                         atributo = "NombreEvento";
                         System.out.print("Introduzca el nombre nuevo: ");
-                        valor = scanner.nextLine();
+                        valor = scanner.nextLine().trim();
                         break;
                     case 2:
                         atributo = "FechaEvento";
-                        System.out.print("Introduzca la fecha nueva (YYYY-MM-DD): ");
-                        valor = scanner.nextLine();
+                        valor = pedirFecha();
                         break;
                     case 3:
                         atributo = "HoraInicio";
-                        System.out.print("Introduzca la hora nueva (HH:MM:SS): ");
-                        valor = scanner.nextLine();
+                        valor = pedirHora();
                         break;
                     case 4:
                         atributo = "Precio";
-                        System.out.print("Introduzca el precio nuevo: ");
-                        valor = scanner.nextLine();
+                        valor = pedirPrecio();
                         break;
                     case 5:
                         atributo = "Capacidad";
-                        System.out.print("Introduzca la capacidad nueva: ");
-                        valor = scanner.nextLine();
+                        valor = pedirCapacidad();
                         break;
                     case 6:
                         System.out.println("Volviendo al menú de eventos.");
@@ -151,7 +148,7 @@ public class EventoView {
                         System.out.println("Opción no válida. Intente de nuevo.");
                 }
 
-                if (!atributo.isEmpty()) {
+                if (!atributo.isEmpty() && !valor.isEmpty()) {
                     try {
                         eventosDAO.actualizar(atributo, valor, evento.getEventoID());
                         System.out.println("Evento actualizado.");
@@ -174,16 +171,11 @@ public class EventoView {
             int id = scanner.nextInt();
             scanner.nextLine();
             System.out.print("Nombre: ");
-            String nombre = scanner.nextLine();
-            System.out.print("Fecha (YYYY-MM-DD): ");
-            Date fecha = Date.valueOf(scanner.nextLine());
-            System.out.print("Hora (HH:MM:SS): ");
-            Time hora = Time.valueOf(scanner.nextLine());
-            System.out.print("Precio: ");
-            double precio = scanner.nextDouble();
-            System.out.print("Capacidad: ");
-            int capacidad = scanner.nextInt();
-            scanner.nextLine();
+            String nombre = scanner.nextLine().trim();
+            Date fecha = Date.valueOf(pedirFecha());
+            Time hora = Time.valueOf(pedirHora());
+            double precio = Double.parseDouble(pedirPrecio());
+            int capacidad = Integer.parseInt(pedirCapacidad());
 
             Eventos evento = new Eventos(id, nombre, fecha, hora, precio, capacidad);
             eventosDAO.insertar(evento);
@@ -208,7 +200,7 @@ public class EventoView {
 
             if (eventosDAO.buscarPorID(idEliminar) != null) {
                 System.out.print("¿Seguro que desea eliminar el evento con ID " + idEliminar + "? (Si/No): ");
-                String respuesta = scanner.nextLine();
+                String respuesta = scanner.nextLine().trim();
                 if (respuesta.equalsIgnoreCase("Si")) {
                     eventosDAO.eliminar(idEliminar);
                     System.out.println("Evento eliminado exitosamente.");
@@ -241,6 +233,66 @@ public class EventoView {
         } catch (Exception e) {
             System.out.println("Error al mostrar los eventos: " + e.getMessage());
         }
+    }
+
+    private String pedirFecha() {
+        String fechaStr;
+        boolean valido;
+        Pattern pattern = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+        do {
+            System.out.print("Fecha (YYYY-MM-DD): ");
+            fechaStr = scanner.nextLine().trim();
+            valido = pattern.matcher(fechaStr).matches();
+            if (!valido) {
+                System.out.println("Error: El formato de la fecha no es válido. Use el formato YYYY-MM-DD (Ejemplo: 2025-05-09).");
+            }
+        } while (!valido);
+        return fechaStr;
+    }
+
+    private String pedirHora() {
+        String horaStr;
+        boolean valido;
+        Pattern pattern = Pattern.compile("^\\d{2}:\\d{2}:\\d{2}$");
+        do {
+            System.out.print("Hora (HH:MM:SS): ");
+            horaStr = scanner.nextLine().trim();
+            valido = pattern.matcher(horaStr).matches();
+            if (!valido) {
+                System.out.println("Error: El formato de la hora no es válido. Use el formato HH:MM:SS (Ejemplo: 18:30:00).");
+            }
+        } while (!valido);
+        return horaStr;
+    }
+
+    private String pedirPrecio() {
+        String precioStr;
+        boolean valido;
+        Pattern pattern = Pattern.compile("^\\d+(\\.\\d{1,2})?$");
+        do {
+            System.out.print("Precio (Ejemplo: 25.50): ");
+            precioStr = scanner.nextLine().trim();
+            valido = pattern.matcher(precioStr).matches();
+            if (!valido) {
+                System.out.println("Error: El formato del precio no es válido. Use números, opcionalmente con dos decimales.");
+            }
+        } while (!valido);
+        return precioStr;
+    }
+
+    private String pedirCapacidad() {
+        String capacidadStr;
+        boolean valido;
+        Pattern pattern = Pattern.compile("^\\d+$");
+        do {
+            System.out.print("Capacidad (Número entero): ");
+            capacidadStr = scanner.nextLine().trim();
+            valido = pattern.matcher(capacidadStr).matches();
+            if (!valido) {
+                System.out.println("Error: La capacidad debe ser un número entero.");
+            }
+        } while (!valido);
+        return capacidadStr;
     }
 
     public void cerrarScanner() {

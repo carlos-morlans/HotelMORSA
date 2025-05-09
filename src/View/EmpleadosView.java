@@ -5,6 +5,8 @@ import Model.Empleados;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmpleadosView {
 
@@ -58,8 +60,7 @@ public class EmpleadosView {
 
     public void buscarDNI() {
         System.out.println("\n--- Buscar Empleado por DNI ---");
-        System.out.print("DNI del empleado a buscar: ");
-        String dni = scanner.nextLine();
+        String dni = pedirDNI("DNI del empleado a buscar");
         empleado = empleadosDAO.buscarPorDni(dni);
 
         if (empleado != null) {
@@ -79,8 +80,7 @@ public class EmpleadosView {
 
     public void modificarEmpleado() {
         System.out.println("\n--- Modificar Empleado ---");
-        System.out.print("DNI del empleado a modificar: ");
-        String dni = scanner.nextLine();
+        String dni = pedirDNI("DNI del empleado a modificar");
 
         empleado = empleadosDAO.buscarPorDni(dni);
         if (empleado == null) {
@@ -117,91 +117,75 @@ public class EmpleadosView {
             String valor = "";
 
             switch (opcionModificar) {
-                case 1: {
+                case 1:
                     atributo = "Nombre";
                     System.out.print("Nuevo nombre: ");
-                    valor = scanner.nextLine();
+                    valor = scanner.nextLine().trim();
                     break;
-                }
-                case 2: {
+                case 2:
                     atributo = "Apellido";
                     System.out.print("Nuevo apellido: ");
-                    valor = scanner.nextLine();
+                    valor = scanner.nextLine().trim();
                     break;
-                }
-                case 3: {
+                case 3:
                     atributo = "Telefono";
-                    System.out.print("Nuevo teléfono: ");
-                    valor = scanner.nextLine();
+                    valor = pedirTelefono();
                     break;
-                }
-                case 4: {
+                case 4:
                     atributo = "Email";
-                    System.out.print("Nuevo email: ");
-                    valor = scanner.nextLine();
+                    valor = pedirEmail();
                     break;
-                }
-                case 5: {
+                case 5:
                     atributo = "Puesto";
                     System.out.print("Nuevo puesto: ");
-                    valor = scanner.nextLine();
+                    valor = scanner.nextLine().trim();
                     break;
-                }
-                case 6: {
+                case 6:
                     atributo = "Jornada";
                     System.out.print("Nueva jornada: ");
-                    valor = scanner.nextLine();
+                    valor = scanner.nextLine().trim();
                     break;
-                }
-                case 7: {
+                case 7:
                     atributo = "Horas Extras";
-                    System.out.print("Nuevas horas extras: ");
-                    valor = scanner.nextLine();
+                    int horasExtras = pedirHorasExtras();
+                    if (horasExtras != -1) {
+                        atributo = "Horas Extras";
+                        valor = String.valueOf(horasExtras);
+                    }
                     break;
-                }
-                case 0: {
+                case 0:
                     System.out.println("Volviendo al menú de empleados.");
                     break;
-                }
-                default: {
+                default:
                     if (opcionModificar != -1) {
                         System.out.println("Opción no válida.");
                     }
-                }
             }
-            if (!atributo.isEmpty()) {
+            if (!atributo.isEmpty() && !valor.isEmpty()) {
                 empleadosDAO.actualizar(atributo, valor, dni);
                 System.out.println("Empleado modificado.");
+            } else if (atributo.equals("Horas Extras") && valor.equals(String.valueOf(-1))) {
+                // No se realiza la actualización si pedirHorasExtras devuelve -1 (error)
             }
+
         } while (opcionModificar != 0);
     }
 
     public void añadirEmpleado() {
         System.out.println("\n--- Añadir un Nuevo Empleado ---");
-        System.out.print("DNI: ");
-        String dni = scanner.nextLine();
-        System.out.print("Nombre: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Apellidos: ");
-        String apellido = scanner.nextLine();
-        System.out.print("Teléfono: ");
-        String telefono = scanner.nextLine();
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String dni = pedirDNI("DNI");
+        String nombre = pedirNombre();
+        String apellido = pedirApellido();
+        String telefono = pedirTelefono();
+        String email = pedirEmail();
         System.out.print("Puesto: ");
-        String puesto = scanner.nextLine();
+        String puesto = scanner.nextLine().trim();
         System.out.print("Jornada: ");
-        String jornada = scanner.nextLine();
-        int horasExtras = 0;
-        try {
-            System.out.print("Horas Extras: ");
-            horasExtras = scanner.nextInt();
-        } catch (InputMismatchException e) {
-            System.out.println("Error: Por favor, introduce un número para las horas extras.");
-            scanner.next(); // Limpiar el buffer
-            return; // O podrías establecer un valor por defecto y continuar
+        String jornada = scanner.nextLine().trim();
+        int horasExtras = pedirHorasExtras();
+        if (horasExtras == -1) {
+            return; // No se añade el empleado si hay un error al introducir las horas extras
         }
-        scanner.nextLine(); // Consumir la nueva línea
 
         Empleados nuevoEmpleado = new Empleados(dni, nombre, apellido, puesto, email, telefono, jornada, horasExtras);
         empleadosDAO.insertar(nuevoEmpleado);
@@ -210,16 +194,98 @@ public class EmpleadosView {
 
     public void eliminarEmpleado() {
         System.out.println("\n--- Eliminar Empleado ---");
-        System.out.print("DNI del empleado a eliminar: ");
-        String dni = scanner.nextLine();
+        String dni = pedirDNI("DNI del empleado a eliminar");
 
         System.out.print("¿Seguro que quieres eliminar a este empleado (Si/No)? ");
-        String respuesta = scanner.nextLine();
+        String respuesta = scanner.nextLine().trim();
         if (respuesta.equalsIgnoreCase("Si")) {
             empleadosDAO.eliminar(dni);
             System.out.println("Empleado eliminado.");
         } else {
             System.out.println("Operación cancelada.");
+        }
+    }
+
+    private String pedirDNI(String prompt) {
+        String dni;
+        boolean valido;
+        do {
+            System.out.print(prompt + " (Ejemplo: 12345678X): ");
+            dni = scanner.nextLine().trim().toUpperCase();
+            valido = validarDNI(dni);
+            if (!valido) {
+                System.out.println("Error: El formato del DNI no es válido. Debe tener 8 números seguidos de una letra.");
+            }
+        } while (!valido);
+        return dni;
+    }
+
+    private boolean validarDNI(String dni) {
+        Pattern pattern = Pattern.compile("^[0-9]{8}[A-Z]$");
+        Matcher matcher = pattern.matcher(dni);
+        return matcher.matches();
+    }
+
+    private String pedirNombre() {
+        System.out.print("Nombre: ");
+        return scanner.nextLine().trim();
+    }
+
+    private String pedirApellido() {
+        System.out.print("Apellidos: ");
+        return scanner.nextLine().trim();
+    }
+
+    private String pedirEmail() {
+        String email;
+        boolean valido;
+        do {
+            System.out.print("Email (Ejemplo: usuario@dominio.com): ");
+            email = scanner.nextLine().trim();
+            valido = validarEmail(email);
+            if (!valido) {
+                System.out.println("Error: El formato del email no es válido.");
+            }
+        } while (!valido);
+        return email;
+    }
+
+    private boolean validarEmail(String email) {
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private String pedirTelefono() {
+        String telefono;
+        boolean valido;
+        do {
+            System.out.print("Teléfono (Ejemplo: 6XXXXXXXX o 9XXXXXXXX): ");
+            telefono = scanner.nextLine().trim();
+            valido = validarTelefono(telefono);
+            if (!valido) {
+                System.out.println("Error: El formato del teléfono no es válido. Debe empezar por 6 o 9 y tener 9 dígitos.");
+            }
+        } while (!valido);
+        return telefono;
+    }
+
+    private boolean validarTelefono(String telefono) {
+        Pattern pattern = Pattern.compile("^[69][0-9]{8}$");
+        Matcher matcher = pattern.matcher(telefono);
+        return matcher.matches();
+    }
+
+    private int pedirHorasExtras() {
+        try {
+            System.out.print("Horas Extras: ");
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número entero para las horas extras.");
+            scanner.next(); // Limpiar el buffer
+            return -1; // Devolver un valor especial para indicar error
+        } finally {
+            scanner.nextLine(); // Consumir la nueva línea
         }
     }
 

@@ -5,6 +5,8 @@ import Model.Clientes;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ClienteView {
 
@@ -59,26 +61,95 @@ public class ClienteView {
 
     public void añadirCliente() {
         System.out.println("\n--- Añadir Nuevo Cliente ---");
-        try {
-            System.out.print("DNI: ");
-            String dni = scanner.nextLine();
-            System.out.print("Nombre: ");
-            String nombre = scanner.nextLine();
-            System.out.print("Apellido: ");
-            String apellido = scanner.nextLine();
-            System.out.print("Email: ");
-            String email = scanner.nextLine();
-            System.out.print("Teléfono: ");
-            String telefono = scanner.nextLine();
-            System.out.print("Dirección: ");
-            String direccion = scanner.nextLine();
-            cliente = new Clientes(dni, nombre, apellido, email, telefono, direccion);
+        String dni = pedirDNI();
+        String nombre = pedirNombre();
+        String apellido = pedirApellido();
+        String email = pedirEmail();
+        String telefono = pedirTelefono();
+        String direccion = pedirDireccion();
 
+        try {
+            cliente = new Clientes(dni, nombre, apellido, email, telefono, direccion);
             clienteDAO.insertar(cliente);
             System.out.println("Cliente añadido correctamente.");
         } catch (Exception e) {
             System.out.println("Error al añadir el cliente: " + e.getMessage());
         }
+    }
+
+    private String pedirDNI() {
+        String dni;
+        boolean valido;
+        do {
+            System.out.print("DNI (Ejemplo: 12345678X): ");
+            dni = scanner.nextLine().trim().toUpperCase();
+            valido = validarDNI(dni);
+            if (!valido) {
+                System.out.println("Error: El formato del DNI no es válido. Debe tener 8 números seguidos de una letra.");
+            }
+        } while (!valido);
+        return dni;
+    }
+
+    private boolean validarDNI(String dni) {
+        Pattern pattern = Pattern.compile("^[0-9]{8}[A-Z]$");
+        Matcher matcher = pattern.matcher(dni);
+        return matcher.matches();
+    }
+
+    private String pedirNombre() {
+        System.out.print("Nombre: ");
+        return scanner.nextLine().trim();
+    }
+
+    private String pedirApellido() {
+        System.out.print("Apellido: ");
+        return scanner.nextLine().trim();
+    }
+
+    private String pedirEmail() {
+        String email;
+        boolean valido;
+        do {
+            System.out.print("Email (Ejemplo: usuario@dominio.com): ");
+            email = scanner.nextLine().trim();
+            valido = validarEmail(email);
+            if (!valido) {
+                System.out.println("Error: El formato del email no es válido.");
+            }
+        } while (!valido);
+        return email;
+    }
+
+    private boolean validarEmail(String email) {
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private String pedirTelefono() {
+        String telefono;
+        boolean valido;
+        do {
+            System.out.print("Teléfono (Ejemplo: 6XXXXXXXX o 9XXXXXXXX): ");
+            telefono = scanner.nextLine().trim();
+            valido = validarTelefono(telefono);
+            if (!valido) {
+                System.out.println("Error: El formato del teléfono no es válido. Debe empezar por 6 o 9 y tener 9 dígitos.");
+            }
+        } while (!valido);
+        return telefono;
+    }
+
+    private boolean validarTelefono(String telefono) {
+        Pattern pattern = Pattern.compile("^[69][0-9]{8}$");
+        Matcher matcher = pattern.matcher(telefono);
+        return matcher.matches();
+    }
+
+    private String pedirDireccion() {
+        System.out.print("Dirección: ");
+        return scanner.nextLine().trim();
     }
 
     public void modificarCliente() {
@@ -112,15 +183,31 @@ public class ClienteView {
             scanner.nextLine(); // Consumir la nueva línea
 
             String atributo = null;
-            System.out.print("Nuevo valor: ");
-            String valor = scanner.nextLine();
+            String valor = null;
 
             switch (opcion2) {
-                case 1 -> atributo = "Nombre";
-                case 2 -> atributo = "Apellido";
-                case 3 -> atributo = "Email";
-                case 4 -> atributo = "Telefono";
-                case 5 -> atributo = "Direccion";
+                case 1 -> {
+                    atributo = "Nombre";
+                    System.out.print("Nuevo nombre: ");
+                    valor = scanner.nextLine().trim();
+                }
+                case 2 -> {
+                    atributo = "Apellido";
+                    System.out.print("Nuevo apellido: ");
+                    valor = scanner.nextLine().trim();
+                }
+                case 3 -> {
+                    atributo = "Email";
+                    valor = pedirEmail();
+                }
+                case 4 -> {
+                    atributo = "Telefono";
+                    valor = pedirTelefono();
+                }
+                case 5 -> {
+                    atributo = "Direccion";
+                    valor = pedirDireccion();
+                }
                 case 0 -> System.out.println("Volviendo al menú de clientes.");
                 default -> {
                     if (opcion2 != -1) {
@@ -129,7 +216,7 @@ public class ClienteView {
                 }
             }
 
-            if (atributo != null) {
+            if (atributo != null && valor != null) {
                 clienteDAO.actualizar(atributo, valor, dni);
                 System.out.println("Cliente modificado correctamente.");
             }

@@ -1,6 +1,6 @@
 --Creación de tablas
     CREATE TABLE Habitaciones (
-        NumeroHabitacion INT PRIMARY KEY AUTO_INCREMENT,
+        NumeroHabitacion INT PRIMARY KEY,
         TipoHabitacion VARCHAR (50) NOT NULL,
         Capacidad INT NOT NULL DEFAULT 1,
         PrecioNoche DECIMAL(10, 2) NOT NULL,
