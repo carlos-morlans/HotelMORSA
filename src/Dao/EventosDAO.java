@@ -13,7 +13,8 @@ public class EventosDAO {
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                 stmt.setInt(1, evento.getEventoID()); // Asigna el valor del teléfono
                 stmt.setString(2, evento.getNombreEvento()); 
-                stmt.setDate(3, new java.sql.Date(fechaEvento.getTime()));                stmt.setTime(4, evento.getHoraInicio());
+                stmt.setDate(3, new java.sql.Date(fechaEvento.getTime()));                
+                stmt.setTime(4, evento.getHoraInicio());
                 stmt.setDouble(5, evento.getPrecio());
                 stmt.setInt(6, evento.getCapacidad());
                 

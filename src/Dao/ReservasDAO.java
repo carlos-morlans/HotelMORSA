@@ -14,21 +14,13 @@ public class ReservasDAO {
 
     Connection conexion = ConexionDB.conectar();
 
-      public void crearReserva(Reservas reserva) {
-        
+    public void crearReserva(Reservas reserva) {
         
         String sql = "{call CalcularReserva(?, ?, ?, ?, ?, ?, ?)}";
-
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
         if (reserva.getFechaEntrada() == null || reserva.getFechaSalida() == null) {
             throw new IllegalArgumentException("Las fechas no pueden ser nulas");
         }
-
-       // String fechaConComillas = "'" + reserva.getFechaEntrada().format(formatter) + "'";
-       // String fechaConComillas2 = "'" + reserva.getFechaSalida().format(formatter) + "'";
-       // System.out.println(fechaConComillas);
-       // System.out.println(fechaConComillas2);
 
         try (CallableStatement stmt = conexion.prepareCall(sql)) {
             // Establecer parámetros de entrada
