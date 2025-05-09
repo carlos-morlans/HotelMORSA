@@ -70,20 +70,21 @@
         Capacidad INT
     );
 
+    CREATE TABLE RegistroEmpleados (
+        RegistroID INT PRIMARY KEY AUTO_INCREMENT,
+        EmpleadoDni VARCHAR(20) NOT NULL,
+        Tipo VARCHAR(10) NOT NULL,  -- Tipo de registro: 'Entrada' o 'Salida'
+        HORA TIME NOT NULL,         -- Hora del registro
+        FechaRegistro DATE NOT NULL,
+        FOREIGN KEY (EmpleadoDni) REFERENCES Empleados(EmpleadoDni) ON DELETE CASCADE
+    );
+
 -- Índices
     -- Tabla Habitaciones
     CREATE INDEX idx_NumeroHabitacion ON Habitaciones (NumeroHabitacion);
 
     -- Tabla Garaje
     CREATE INDEX idx_Estado ON Garaje (Estado);
-
-
-
-
-
-
-
-
 
 -- Procedimientos
     DELIMITER //

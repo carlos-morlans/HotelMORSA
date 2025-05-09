@@ -23,7 +23,7 @@ public class PagosView {
         System.out.println("4. Ver gastos");
 
         opcion = sc.nextInt();
-        sc.nextLine(); 
+        sc.nextLine();
         switch (opcion) {
             case 1 -> verHistorialPagos();
             case 2 -> verIngresos();
@@ -32,44 +32,44 @@ public class PagosView {
             default -> System.out.println("Opción no válida. Intente nuevamente.");
         }
 
-        
+
     }
 
     public void verHistorialPagos() {
         int limite;
-        
+
         String tipo="Historial";
         System.out.println("Historial de pagos:");
         System.out.println("Ingrese el número de pagos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        
 
-        this.filtroPagos(limite, tipo);  
+
+        this.filtroPagos(limite, tipo);
     }
 
     public void verIngresos() {
         int limite;
-        
+
         String tipo="Ingresos";
         System.out.println("Ingresos:");
         System.out.println("Ingrese el número de ingresos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        
-        this.filtroPagos(limite, tipo);  
+
+        this.filtroPagos(limite, tipo);
     }
 
     public void verReembolsos() {
         int limite;
-        
+
         String tipo="Reembolsos";
         System.out.println("Reembolsos:");
         System.out.println("Ingrese el número de reembolsos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();
-        
-        this.filtroPagos(limite, tipo);  
+
+        this.filtroPagos(limite, tipo);
     }
 
     public void verPagosEmpleado() {
@@ -92,7 +92,6 @@ public class PagosView {
         System.out.println("3. Por el ID de la Reserva");
         System.out.println("4. Por DNI del Empleado");
         System.out.println("5. Recientes");
-
 
         opcion = sc.nextInt();
         sc.nextLine();
