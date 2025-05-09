@@ -88,7 +88,7 @@ public class GarajeDAO {
         }
     } catch (SQLException e) {
         System.out.println("Error en la búsqueda: " + e.getMessage());
-        // Para depuración adicional:
+        
         e.printStackTrace();
     }
 }
