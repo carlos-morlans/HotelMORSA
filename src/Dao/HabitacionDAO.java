@@ -31,7 +31,7 @@ public class HabitacionDAO {
 
     }
 
-    public void actualizar(String atributo, String valor, String numero) {
+    public void actualizar(String atributo, String valor, Integer numero) {
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
            
@@ -40,7 +40,7 @@ public class HabitacionDAO {
                     
                     stmt.setString(1, atributo ); // Columna que deseamos cambiar
                     stmt.setString(2,  valor); // valor que le queremos dar
-                    stmt.setString(3, numero); // Asigna el numero de la habitacion
+                    stmt.setInt(3, numero); // Asigna el numero de la habitacion
                     stmt.executeUpdate(); // Ejecuta la actualización
                     
                 } catch (SQLException e) {

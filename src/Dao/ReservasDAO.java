@@ -113,7 +113,7 @@ public class ReservasDAO {
                     System.out.println("Fecha Entrada: " + rs.getDate("FechaEntrada"));
                     System.out.println("Fecha Salida: " + rs.getDate("FechaSalida"));
                     System.out.println("Número Adultos: " + rs.getInt("NumeroAdultos"));
-                    System.out.println("Número Niños: " + rs.getInt("NumeroNinos"));
+                    System.out.println("Número Ninos: " + rs.getInt("NumeroNinos"));
                     System.out.println("Fecha Reserva: " + rs.getTimestamp("FechaReserva"));
                     System.out.println("Estado Reserva: " + rs.getString("EstadoReserva"));
                     System.out.println("Precio Total: " + rs.getDouble("PrecioTotal"));

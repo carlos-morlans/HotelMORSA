@@ -28,7 +28,7 @@ public class EmpleadosView {
             System.out.println("=".repeat(35));
             System.out.println("1. [BUSCAR] Empleado por DNI");
             System.out.println("2. [MODIFICAR] Empleado");
-            System.out.println("3. [AÑADIR] Nuevo Empleado");
+            System.out.println("3. [AnADIR] Nuevo Empleado");
             System.out.println("4. [ELIMINAR] Empleado");
             System.out.println("0. [VOLVER] Al menú principal");
             System.out.print("Seleccione una opción: ");
@@ -46,7 +46,7 @@ public class EmpleadosView {
             switch (opcion) {
                 case 1 -> buscarDNI();
                 case 2 -> modificarEmpleado();
-                case 3 -> añadirEmpleado();
+                case 3 -> anadirEmpleado();
                 case 4 -> eliminarEmpleado();
                 case 0 -> System.out.println("Volviendo al menú principal...");
                 default -> {
@@ -171,8 +171,8 @@ public class EmpleadosView {
         } while (opcionModificar != 0);
     }
 
-    public void añadirEmpleado() {
-        System.out.println("\n--- Añadir un Nuevo Empleado ---");
+    public void anadirEmpleado() {
+        System.out.println("\n--- Anadir un Nuevo Empleado ---");
         String dni = pedirDNI("DNI");
         String nombre = pedirNombre();
         String apellido = pedirApellido();
@@ -184,12 +184,12 @@ public class EmpleadosView {
         String jornada = scanner.nextLine().trim();
         int horasExtras = pedirHorasExtras();
         if (horasExtras == -1) {
-            return; // No se añade el empleado si hay un error al introducir las horas extras
+            return; // No se anade el empleado si hay un error al introducir las horas extras
         }
 
         Empleados nuevoEmpleado = new Empleados(dni, nombre, apellido, puesto, email, telefono, jornada, horasExtras);
         empleadosDAO.insertar(nuevoEmpleado);
-        System.out.println("Nuevo empleado añadido exitosamente.");
+        System.out.println("Nuevo empleado anadido exitosamente.");
     }
 
     public void eliminarEmpleado() {

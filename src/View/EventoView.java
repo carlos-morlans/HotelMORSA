@@ -26,7 +26,7 @@ public class EventoView {
             System.out.println("=".repeat(35));
             System.out.println("1. [BUSCAR] Evento por ID");
             System.out.println("2. [MODIFICAR] Evento");
-            System.out.println("3. [AÑADIR] Nuevo Evento");
+            System.out.println("3. [AnADIR] Nuevo Evento");
             System.out.println("4. [MOSTRAR] Todos los Eventos");
             System.out.println("5. [ELIMINAR] Evento");
             System.out.println("0. [VOLVER] Al menú principal");

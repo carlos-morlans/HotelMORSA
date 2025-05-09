@@ -129,25 +129,25 @@ public class HabitacionesView {
                 case 1:
                     System.out.print("Ingrese el nuevo Tipo de Habitación: ");
                     String nuevoTipo = scanner.nextLine();
-                    habitacionDAO.actualizar("TipoHabitacion", nuevoTipo, String.valueOf(numeroHabitacion));
+                    habitacionDAO.actualizar("TipoHabitacion", nuevoTipo, numeroHabitacion);
                     System.out.println("Tipo de habitación actualizado.");
                     break;
                 case 2:
                     System.out.print("Ingrese la nueva Capacidad: ");
                     String nuevaCapacidad = scanner.nextLine();
-                    habitacionDAO.actualizar("Capacidad", nuevaCapacidad, String.valueOf(numeroHabitacion));
+                    habitacionDAO.actualizar("Capacidad", nuevaCapacidad, numeroHabitacion);
                     System.out.println("Capacidad de la habitación actualizada.");
                     break;
                 case 3:
                     System.out.print("Ingrese el nuevo Precio por Noche: ");
                     String nuevoPrecio = scanner.nextLine();
-                    habitacionDAO.actualizar("PrecioNoche", nuevoPrecio, String.valueOf(numeroHabitacion));
+                    habitacionDAO.actualizar("PrecioNoche", nuevoPrecio, numeroHabitacion);
                     System.out.println("Precio por noche actualizado.");
                     break;
                 case 4:
                     System.out.print("Ingrese el nuevo Estado: ");
                     String nuevoEstado = scanner.nextLine();
-                    habitacionDAO.actualizar("Estado", nuevoEstado, String.valueOf(numeroHabitacion));
+                    habitacionDAO.actualizar("Estado", nuevoEstado, numeroHabitacion);
                     System.out.println("Estado de la habitación actualizado.");
                     break;
                 case 0:
