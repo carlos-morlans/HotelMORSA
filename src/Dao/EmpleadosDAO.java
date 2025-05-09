@@ -25,7 +25,7 @@ public class EmpleadosDAO {
                 stmt.setInt(8, empleado.getHorasExtra());
                 
                 stmt.executeUpdate(); // Ejecuta la consulta de inserción
-                System.out.println("Empleado agregado exitosamente.");
+                
                 
             }catch (SQLException e) {
                 System.out.println("Error al agregar empleado: " + e.getMessage());
@@ -65,7 +65,7 @@ public class EmpleadosDAO {
         if (conexion != null) {String query = "DELETE FROM Empleados WHERE EmpleadoDni = ?";
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {stmt.setString(1, dni); // Asigna el ID del empleado
                 stmt.executeUpdate(); // Ejecuta la eliminación
-                System.out.println("Empleado eliminado.");
+                
             } catch (SQLException e) {
                 System.out.println("Error al eliminar empleado: " + e.getMessage());
             }
