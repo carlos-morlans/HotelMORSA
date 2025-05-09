@@ -31,31 +31,56 @@ public class HabitacionDAO {
 
     }
 
-    public void actualizar(String atributo, String valor, Integer numero) {
-        Connection conexion = ConexionDB.conectar();
-        if (conexion != null) {
-           
-                String query = "UPDATE Habitaciones SET ? = ? WHERE NumeroHabitacion = ?";
-                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                    
-                    stmt.setString(1, atributo ); // Columna que deseamos cambiar
-                    stmt.setString(2,  valor); // valor que le queremos dar
-                    stmt.setInt(3, numero); // Asigna el numero de la habitacion
-                    stmt.executeUpdate(); // Ejecuta la actualización
-                    
-                } catch (SQLException e) {
-                    System.out.println("Error al actualizar" + atributo + ":" + e.getMessage());
-                }
-
-            
-            
+    public void actualizar(String atributo, String valor, int numeroHabitacion) {
+        String[] columnasPermitidas = {"TipoHabitacion", "Capacidad", "PrecioNoche", "Estado"};
+        boolean atributoValido = false;
+        
+        for (String columna : columnasPermitidas) {
+            if (columna.equals(atributo)) {
+                atributoValido = true;
+                break;
             }
-            System.out.println("No se ha podido conectar con la base de datos");
-        
-           
-        
+        }
 
+        if (!atributoValido) {
+            System.out.println("Error: Atributo no válido para modificación");
+            return;
+        }
+
+        String query = "UPDATE Habitaciones SET " + atributo + " = ? WHERE NumeroHabitacion = ?";
+        
+        try (Connection conexion = ConexionDB.conectar();
+             PreparedStatement stmt = conexion.prepareStatement(query)) {
+            
+            // Convertir y asignar el valor según el tipo de dato
+            switch(atributo) {
+                case "TipoHabitacion":
+                case "Estado":
+                    stmt.setString(1, valor);
+                    break;
+                case "Capacidad":
+                    stmt.setInt(1, Integer.parseInt(valor));
+                    break;
+                case "PrecioNoche":
+                    stmt.setDouble(1, Double.parseDouble(valor));
+                    break;
+            }
+            
+            stmt.setInt(2, numeroHabitacion);
+            
+            int filasAfectadas = stmt.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Campo '" + atributo + "' actualizado correctamente");
+            } else {
+                System.out.println("No se encontró habitación con número " + numeroHabitacion);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error SQL al actualizar: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Formato numérico incorrecto para " + atributo);
+        }
     }
+
 
     public void eliminar(String numero) {
         Connection conexion = ConexionDB.conectar();
@@ -70,52 +95,28 @@ public class HabitacionDAO {
 
     }
 
-    public Habitaciones buscarPorNumero(int numero){
-        Connection conexion = ConexionDB.conectar();
-        if (conexion != null) {
-            Habitaciones habitacion;
-            String tipo;
-            int capacidad;
-            double precio;
-            String estado;
+    public Habitaciones buscarPorNumero(int numeroHabitacion) {
+        String query = "SELECT NumeroHabitacion, TipoHabitacion, Capacidad, PrecioNoche, Estado " + 
+                      "FROM Habitaciones WHERE NumeroHabitacion = ?";
         
-            PreparedStatement stmt = null;
-            ResultSet rs = null;
-        
-
-            try {
-                String query = "SELECT NumeroHabitacion, TipoHabitacion, Capacidad, PrecioNoche, Estado" + "FROM Habitaciones WHERE NumeroHabitacion = ?";
-
-                stmt = conexion.prepareStatement(query);
-                stmt.setInt(1, numero); 
-
-                rs = stmt.executeQuery();
-
+        try (Connection conexion = ConexionDB.conectar();
+             PreparedStatement stmt = conexion.prepareStatement(query)) {
+            
+            stmt.setInt(1, numeroHabitacion);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    // Extraemos los datos del ResultSet
-                    numero = rs.getInt("NumeroHabitacion");
-                    tipo = rs.getString("TipoHabitacion");
-                    capacidad = rs.getInt("Capacidad");
-                    precio = rs.getDouble("PrecioNoche");
-                    estado = rs.getString("Estado");
-                    
-
-                    habitacion = new Habitaciones(numero, tipo, capacidad, precio, estado);
-                    return habitacion;
+                    return new Habitaciones(
+                        rs.getInt("NumeroHabitacion"),
+                        rs.getString("TipoHabitacion"),
+                        rs.getInt("Capacidad"),
+                        rs.getDouble("PrecioNoche"),
+                        rs.getString("Estado")
+                    );
                 }
-
-
-                } catch (SQLException e) {
-                System.err.println("Error al buscar habitación por número: " + e.getMessage());
-                // Podrías lanzar una excepción personalizada aquí si lo prefieres
-            } finally {
-                // Cerramos recursos en orden inverso a su creación
-                try { if (rs != null) rs.close(); } catch (SQLException e) { /* ignorar */ }
-                try { if (stmt != null) stmt.close(); } catch (SQLException e) { /* ignorar */ }
-                
             }
-
-        
+        } catch (SQLException e) {
+            System.out.println("Error al buscar habitación: " + e.getMessage());
         }
         return null;
     }

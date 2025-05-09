@@ -77,7 +77,7 @@ public void buscarPlaza(int numeroPlaza) {
         // Asignar el parámetro a la consulta
         stmt.setInt(1, numeroPlaza);
         
-        // Ejecutar la consulta y procesar resultados
+        
         try (ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 System.out.println("\n--- Plaza Encontrada ---");
