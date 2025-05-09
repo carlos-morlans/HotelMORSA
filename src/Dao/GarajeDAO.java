@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class GarajeDAO {
     public void insertar(Garaje garaje) {
@@ -69,20 +68,28 @@ public class GarajeDAO {
     }
     }
 
-    public void buscarPlaza(int numeroPlaza){
-        Connection conexion = ConexionDB.conectar();
-
-        if (conexion != null) {
-            String query = "SELECT * FROM Garaje WHERE NumeroPlaza = ?";
-            try (Statement stmt = conexion.createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
-
-                System.out.println("Plazas agregadas");
-                System.out.println("numeroPlaza: " + rs.getInt("NumeroPlaza"));
-                System.out.println("estado: " + rs.getString("Estado"));
-            }catch (SQLException e) {
-                System.out.println("Error en la busqueda: " + e.getMessage());
+    public void buscarPlaza(int numeroPlaza) {
+    String query = "SELECT * FROM Garaje WHERE NumeroPlaza = ?";
+    
+    try (Connection conexion = ConexionDB.conectar();
+         PreparedStatement stmt = conexion.prepareStatement(query)) {
+        
+        // Asignar el parámetro a la consulta
+        stmt.setInt(1, numeroPlaza);
+        
+        // Ejecutar la consulta y procesar resultados
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                System.out.println("\n--- Plaza Encontrada ---");
+                System.out.println("Número de Plaza: " + rs.getInt("NumeroPlaza"));
+                System.out.println("Estado: " + rs.getString("Estado"));
+            } else {
+                System.out.println("No se encontró ninguna plaza con el número: " + numeroPlaza);
             }
         }
+    } catch (SQLException e) {
+        System.out.println("Error en la búsqueda: " + e.getMessage());
+        e.printStackTrace(); 
     }
+}
 }
