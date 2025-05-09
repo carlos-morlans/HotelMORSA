@@ -28,30 +28,75 @@ public class EventosDAO {
     }
 
     public void actualizar(String atributo, String valor, int id) {
-        Connection conexion = ConexionDB.conectar();
-        if (conexion != null) {
-           
-                String query = "UPDATE Eventos SET ? = ? WHERE EventoID = ?";
-                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                    
-                    stmt.setString(1, atributo ); // Columna que deseamos cambiar
-                    stmt.setString(2,  valor); // valor que le queremos dar
-                    stmt.setInt(3, id); // Asigna el ID del evento
-                    stmt.executeUpdate(); // Ejecuta la actualización
-                    
-                } catch (SQLException e) {
-                    System.out.println("Error al actualizar" + atributo + ":" + e.getMessage());
-                }
-
-            
-            
-            }
-            System.out.println("No se ha podido conectar con la base de datos");
-        
-           
-        
-
+    Connection conexion = ConexionDB.conectar();
+    if (conexion == null) {
+        System.out.println("Error de conexión a la base de datos");
+        return;
     }
+
+    // Validar que el atributo es uno de los permitidos (seguridad contra SQL injection)
+    String[] columnasPermitidas = {"NombreEvento", "FechaEvento", "HoraInicio", "Precio", "Capacidad"};
+    boolean atributoValido = false;
+    
+    for (String columna : columnasPermitidas) {
+        if (columna.equals(atributo)) {
+            atributoValido = true;
+            break;
+        }
+    }
+
+    if (!atributoValido) {
+        System.out.println("Error: Atributo no válido para modificación");
+        try {
+            conexion.close();
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar conexión: " + e.getMessage());
+        }
+        return;
+    }
+
+    String query = "UPDATE Eventos SET " + atributo + " = ? WHERE EventoID = ?";
+    
+    try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+        // Asignar el valor según el tipo de dato correspondiente
+        switch(atributo) {
+            case "NombreEvento":
+                stmt.setString(1, valor);
+                break;
+            case "FechaEvento":
+                stmt.setDate(1, java.sql.Date.valueOf(valor));
+                break;
+            case "HoraInicio":
+                stmt.setTime(1, java.sql.Time.valueOf(valor + ":00")); // Asegurar formato HH:MM:SS
+                break;
+            case "Precio":
+                stmt.setDouble(1, Double.parseDouble(valor));
+                break;
+            case "Capacidad":
+                stmt.setInt(1, Integer.parseInt(valor));
+                break;
+        }
+        
+        stmt.setInt(2, id);
+        
+        int filasAfectadas = stmt.executeUpdate();
+        if (filasAfectadas > 0) {
+            System.out.println("Campo '" + atributo + "' actualizado correctamente");
+        } else {
+            System.out.println("No se encontró evento con ID " + id + " o no hubo cambios");
+        }
+    } catch (SQLException e) {
+        System.out.println("Error SQL al actualizar: " + e.getMessage());
+    } catch (IllegalArgumentException e) {
+        System.out.println("Error: Formato incorrecto para " + atributo + " - " + e.getMessage());
+    } finally {
+        try {
+            if (conexion != null) conexion.close();
+        } catch (SQLException e) {
+            System.out.println("Error al cerrar conexión: " + e.getMessage());
+        }
+    }
+}
 
     public void eliminar(int id) {
         Connection conexion = ConexionDB.conectar();
