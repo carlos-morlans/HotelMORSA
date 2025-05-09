@@ -20,7 +20,7 @@ public class PagosView {
         System.out.println("1. Ver historial de pagos");
         System.out.println("2. Ver ingresos");
         System.out.println("3. Ver reembolsos");
-        System.out.println("4. Ver gastos");
+        System.out.println("4. Ver pagos empleados");
 
         opcion = sc.nextInt();
         sc.nextLine();
@@ -75,8 +75,8 @@ public class PagosView {
     public void verPagosEmpleado() {
         int limite;
         
-        String tipo="Pagos Empleado";
-        System.out.println("Gastos:");
+        String tipo="Pagos Empleados";
+        System.out.println("Pagos empleados:");
         System.out.println("Ingrese el número de gastos a mostrar:");
         limite = sc.nextInt();
         sc.nextLine();

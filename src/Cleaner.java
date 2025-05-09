@@ -1,4 +1,4 @@
-import Dao.ClienteDAO;
+/*import Dao.ClienteDAO;
 import java.sql.Connection;
 
 import Dao.ConexionDB;
@@ -167,4 +167,4 @@ public class Cleaner {
         }
     }
 }
-}
+}*/

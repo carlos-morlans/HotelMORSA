@@ -94,6 +94,28 @@ public class PagosDAO {
 
     public void filtroRecientes(int limite, String tipo) {
 
+        if(tipo.equals("Historial")){
+            String query = "SELECT * FROM HistorialPagos ORDER BY Fecha DESC LIMIT ?";
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setInt(1, limite);
+                
+                ResultSet rs = stmt.executeQuery();
+                
+                while (rs.next()) {
+                    
+                    System.out.println("Pago ID: " + rs.getInt("HistorialPagoID"));
+                    System.out.println("Cuantía: " + rs.getDouble("Cuantia"));
+                    System.out.println("Fecha Pago: " + rs.getDate("Fecha"));
+                    System.out.println("Concepto: " + rs.getString("Concepto"));
+                    System.out.println("Reserva ID: " + rs.getInt("ReservaID"));
+                    System.out.println("Empleado DNI: " + rs.getString("EmpleadoDni"));
+                    System.out.println("-----------------------------");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al filtrar por pagos recientes: " + e.getMessage());
+            }
+        }
+
         String query = "SELECT * FROM HistorialPagos WHERE Concepto = ? ORDER BY Fecha DESC LIMIT ?";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, tipo);
