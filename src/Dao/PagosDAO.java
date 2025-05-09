@@ -114,7 +114,7 @@ public class PagosDAO {
         } catch (SQLException e) {
             System.out.println("Error al filtrar por pagos recientes: " + e.getMessage());
         }
-       
+
     }
 
     public void filtroFecha(int limite, LocalDate fechaInicio, LocalDate fechaFin, String tipo, int suma) {
@@ -126,9 +126,9 @@ public class PagosDAO {
             stmt.setDate(2, java.sql.Date.valueOf(fechaFin));
             stmt.setString(3, tipo);
             stmt.setInt(4, limite);
-            
+
             ResultSet rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 
                 System.out.println("Pago ID: " + rs.getInt("HistorialPagoID"));
