@@ -18,7 +18,7 @@ public class EventosDAO {
                 stmt.setInt(6, evento.getCapacidad());
                 
                 stmt.executeUpdate(); // Ejecuta la consulta de inserción
-                System.out.println("Evento agregado exitosamente.");
+                
                 
             }catch (SQLException e) {
                 System.out.println("Error al agregar evento: " + e.getMessage());
@@ -58,7 +58,6 @@ public class EventosDAO {
         if (conexion != null) {String query = "DELETE FROM Eventos WHERE EventoID = ?";
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {stmt.setInt(1, id); // Asigna el ID del cliente
                 stmt.executeUpdate(); // Ejecuta la eliminación
-                System.out.println("Evento eliminado.");
             } catch (SQLException e) {
                 System.out.println("Error al eliminar evento: " + e.getMessage());
             }

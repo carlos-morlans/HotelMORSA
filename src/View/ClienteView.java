@@ -223,7 +223,7 @@ public class ClienteView {
 
         } while (opcion2 != 0);
 
-        System.out.println("Saliendo del menú de modificar cliente.");
+        
     }
 
     public void eliminarCliente() {

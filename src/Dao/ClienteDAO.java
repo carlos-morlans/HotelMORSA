@@ -25,7 +25,7 @@ public class ClienteDAO {
                 stmt.setString(6, cliente.getDireccion());
 
                 stmt.executeUpdate(); // Ejecuta la consulta de inserción
-                System.out.println("Cliente agregado exitosamente.");
+                
             } else {
                 System.out.println("No se ha podido conectar con la base de datos para insertar.");
             }
@@ -52,7 +52,7 @@ public class ClienteDAO {
                 stmt.setString(2, dni); // DNI del cliente a actualizar
                 int filasActualizadas = stmt.executeUpdate(); // Ejecuta la actualización
                 if (filasActualizadas > 0) {
-                    System.out.println("Cliente modificado correctamente.");
+                    
                 } else {
                     System.out.println("No se encontró ningún cliente con ese DNI para actualizar.");
                 }
@@ -79,7 +79,7 @@ public class ClienteDAO {
                 stmt.setString(1, dni); // Asigna el DNI del cliente
                 int filasEliminadas = stmt.executeUpdate(); // Ejecuta la eliminación
                 if (filasEliminadas > 0) {
-                    System.out.println("Cliente eliminado.");
+                    
                 } else {
                     System.out.println("No se encontró ningún cliente con ese DNI para eliminar.");
                 }

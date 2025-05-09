@@ -17,7 +17,7 @@ public class GarajeDAO {
                 stmt.setString(2, garaje.getEstado()); 
   
                 stmt.executeUpdate(); // Ejecuta la consulta de inserción
-                System.out.println("Plaza agregada exitosamente.");
+                
                 
             }catch (SQLException e) {
                 System.out.println("Error al agregar la plaza: " + e.getMessage());
@@ -62,7 +62,7 @@ public class GarajeDAO {
         if (conexion != null) {String query = "DELETE FROM Garaje WHERE numeroPlaza = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {stmt.setInt(1, numeroPlaza); // Asigna el ID del cliente
             stmt.executeUpdate(); // Ejecuta la eliminación
-            System.out.println("La plaza ha eliminado.");
+            
         } catch (SQLException e) {
             System.out.println("Error al eliminar la plaza: " + e.getMessage());
         }
