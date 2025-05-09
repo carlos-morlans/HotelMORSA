@@ -131,7 +131,7 @@ public class Reservas {
         .append(" - Salida=").append(this.fechaSalida)
         .append(" (").append(ChronoUnit.DAYS.between(this.fechaEntrada, this.fechaSalida)).append(" noches)");
         sb.append("\n  Huéspedes: ").append(this.numeroAdultos).append(" adultos, ")
-        .append(this.numeroNinos).append(" niños");
+        .append(this.numeroNinos).append(" ninos");
         sb.append("\n  Estado: ").append(this.estadoReserva != null ? this.estadoReserva : "No especificado");
         sb.append("\n  Fecha reserva: ").append(this.fechaReserva);
         

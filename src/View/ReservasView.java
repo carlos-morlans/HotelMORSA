@@ -68,7 +68,7 @@ public class ReservasView {
         int numeroAdultos = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Ingrese el número de niños:");
+        System.out.println("Ingrese el número de ninos:");
         int numeroNinos = sc.nextInt();
         sc.nextLine();
 
@@ -81,7 +81,7 @@ public class ReservasView {
 
     public LocalDateTime fechaMinuto(){
         int year, month, day, hour, minute;
-        System.out.println("Ingrese el año:");
+        System.out.println("Ingrese el ano:");
         year = sc.nextInt();
         System.out.println("Ingrese el mes:");
         month = sc.nextInt();
@@ -96,7 +96,7 @@ public class ReservasView {
 
     public LocalDate fechaDia(){
         int year, month, day;
-        System.out.println("Ingrese el año:");
+        System.out.println("Ingrese el ano:");
         year = sc.nextInt();
         System.out.println("Ingrese el mes:");
         month = sc.nextInt();
@@ -127,7 +127,7 @@ public class ReservasView {
         int numeroAdultos = sc.nextInt();
         sc.nextLine();
 
-        System.out.println("Ingrese el nuevo número de niños:");
+        System.out.println("Ingrese el nuevo número de ninos:");
         int numeroNinos = sc.nextInt();
         sc.nextLine();
 

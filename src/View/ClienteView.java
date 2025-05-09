@@ -27,7 +27,7 @@ public class ClienteView {
             System.out.println("\n" + "=".repeat(35));
             System.out.println("** Menú de Clientes **");
             System.out.println("=".repeat(35));
-            System.out.println("1. [AÑADIR] Nuevo Cliente");
+            System.out.println("1. [AnADIR] Nuevo Cliente");
             System.out.println("2. [MODIFICAR] Cliente");
             System.out.println("3. [ELIMINAR] Cliente");
             System.out.println("4. [VER] Clientes");
@@ -45,7 +45,7 @@ public class ClienteView {
             System.out.println("-".repeat(35));
 
             switch (opcion) {
-                case 1 -> añadirCliente();
+                case 1 -> anadirCliente();
                 case 2 -> modificarCliente();
                 case 3 -> eliminarCliente();
                 case 4 -> verClientes();
@@ -59,8 +59,8 @@ public class ClienteView {
         } while (opcion != 0);
     }
 
-    public void añadirCliente() {
-        System.out.println("\n--- Añadir Nuevo Cliente ---");
+    public void anadirCliente() {
+        System.out.println("\n--- Anadir Nuevo Cliente ---");
         String dni = pedirDNI();
         String nombre = pedirNombre();
         String apellido = pedirApellido();
@@ -71,9 +71,9 @@ public class ClienteView {
         try {
             cliente = new Clientes(dni, nombre, apellido, email, telefono, direccion);
             clienteDAO.insertar(cliente);
-            System.out.println("Cliente añadido correctamente.");
+            System.out.println("Cliente anadido correctamente.");
         } catch (Exception e) {
-            System.out.println("Error al añadir el cliente: " + e.getMessage());
+            System.out.println("Error al anadir el cliente: " + e.getMessage());
         }
     }
 
