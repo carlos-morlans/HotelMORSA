@@ -68,22 +68,16 @@ public class GarajeDAO {
     }
     }
 
-    public void buscarPlaza(int numeroPlaza) {
-
+    
+public void buscarPlaza(int numeroPlaza) {
     // Usar try-with-resources para manejar automáticamente el cierre de recursos
     try (Connection conexion = ConexionDB.conectar();
          PreparedStatement stmt = conexion.prepareStatement("SELECT * FROM Garaje WHERE NumeroPlaza = ?")) {
-
-    String query = "SELECT * FROM Garaje WHERE NumeroPlaza = ?";
-    
-    try (Connection conexion = ConexionDB.conectar();
-         PreparedStatement stmt = conexion.prepareStatement(query)) {
-
         
         // Asignar el parámetro a la consulta
         stmt.setInt(1, numeroPlaza);
         
-        // Ejecutar la consulta y procesar resultados
+        
         try (ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 System.out.println("\n--- Plaza Encontrada ---");
@@ -95,11 +89,8 @@ public class GarajeDAO {
         }
     } catch (SQLException e) {
         System.out.println("Error en la búsqueda: " + e.getMessage());
-
         // Para depuración adicional:
         e.printStackTrace();
-
-
     }
 }
 }
