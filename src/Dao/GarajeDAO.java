@@ -68,7 +68,8 @@ public class GarajeDAO {
     }
     }
 
-    public void buscarPlaza(int numeroPlaza) {
+    
+public void buscarPlaza(int numeroPlaza) {
     // Usar try-with-resources para manejar automáticamente el cierre de recursos
     try (Connection conexion = ConexionDB.conectar();
          PreparedStatement stmt = conexion.prepareStatement("SELECT * FROM Garaje WHERE NumeroPlaza = ?")) {
