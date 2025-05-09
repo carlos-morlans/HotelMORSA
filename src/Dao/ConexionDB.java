@@ -9,7 +9,7 @@ public class ConexionDB {
  
   private static final String USUARIO = "hotel"; // Nombre de usuario de MySQL
  
-  private static final String CONTRASENA = "GestorHotel6713"; // Contraseña del usuario de MySQL
+  private static final String CONTRASENA = "GestorHotel6713"; // Contrasena del usuario de MySQL
  
   // Método para establecer la conexión con la base de datos
   public static Connection conectar() {
