@@ -1,11 +1,8 @@
 package View;
 
+import Dao.PagosDAO;
 import java.time.LocalDate;
 import java.util.Scanner;
-
-import View.ReservasView;
-
-import Dao.PagosDAO;
 
 public class PagosView {
 
@@ -31,7 +28,7 @@ public class PagosView {
             case 1 -> verHistorialPagos();
             case 2 -> verIngresos();
             case 3 -> verReembolsos();
-            case 4 -> verGastos();
+            case 4 -> verPagosEmpleado();
             default -> System.out.println("Opción no válida. Intente nuevamente.");
         }
 
@@ -75,10 +72,10 @@ public class PagosView {
         this.filtroPagos(limite, tipo);  
     }
 
-    public void verGastos() {
+    public void verPagosEmpleado() {
         int limite;
         
-        String tipo="Gastos";
+        String tipo="Pagos Empleado";
         System.out.println("Gastos:");
         System.out.println("Ingrese el número de gastos a mostrar:");
         limite = sc.nextInt();
@@ -144,7 +141,7 @@ public class PagosView {
         cuantiaMaxima = sc.nextDouble();
         sc.nextLine();
 
-        pagosDAO.filtroCuantia(limite, cuantiaMinima, cuantiaMaxima, tipo);
+        pagosDAO.filtroCuantia(limite, cuantiaMaxima, cuantiaMinima, tipo);
     }
 
     public void filtroIDReserva(int limite, String tipo) {
