@@ -44,7 +44,7 @@ public class GarajeDAO {
     public void modificarEstado(int numeroPlaza, String estado) {
         Connection conexion = ConexionDB.conectar();
         if (conexion != null) {
-            String query = "UPDATE Garaje SET numeroPlaza = ? WHERE estado = ?";
+            String query = "UPDATE Garaje SET Estado  = ? WHERE NumeroPlaza  = ?";
             try (PreparedStatement ps = conexion.prepareStatement(query)) {
                 ps.setInt(1, numeroPlaza);
                 ps.setString(2, estado);
