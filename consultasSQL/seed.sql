@@ -105,7 +105,7 @@
         DECLARE nuevaReservaID INT;
 
         -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-        SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
+        SET numDias = DATEDIFF(p_fechaEntrada, p_fechaSalida);
 
         SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
 
