@@ -1,15 +1,12 @@
 package Dao;
 
 import Model.Reservas;
-import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
 
  
 
@@ -21,13 +18,28 @@ public class ReservasDAO {
         
         
         String sql = "{call CalcularReserva(?, ?, ?, ?, ?, ?, ?)}";
+
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
+        if (reserva.getFechaEntrada() == null || reserva.getFechaSalida() == null) {
+            throw new IllegalArgumentException("Las fechas no pueden ser nulas");
+        }
+
+       // String fechaConComillas = "'" + reserva.getFechaEntrada().format(formatter) + "'";
+       // String fechaConComillas2 = "'" + reserva.getFechaSalida().format(formatter) + "'";
+       // System.out.println(fechaConComillas);
+       // System.out.println(fechaConComillas2);
+
         try (CallableStatement stmt = conexion.prepareCall(sql)) {
             // Establecer parámetros de entrada
             stmt.setString(1, reserva.getClienteDni());
             stmt.setInt(2, reserva.getNumeroHabitacion());
-            
+            System.out.println(reserva.getNumeroHabitacion());
+
             // Conversión de LocalDate a java.sql.Date
+            System.out.println(reserva.getFechaEntrada());
+            System.out.println(reserva.getFechaSalida());
+
             stmt.setDate(3, java.sql.Date.valueOf(reserva.getFechaEntrada()));
             stmt.setDate(4, java.sql.Date.valueOf(reserva.getFechaSalida()));
             

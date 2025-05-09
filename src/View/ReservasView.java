@@ -12,7 +12,7 @@ public class ReservasView {
 
     Scanner sc = new Scanner(System.in);
 
-    Reservas reserva;
+    //Reservas reserva;
 
     HabitacionesView habitacion = new HabitacionesView();
 
@@ -58,9 +58,11 @@ public class ReservasView {
 
         System.out.println("Ingrese la fecha de entrada:");
         LocalDate fechaEntrada = this.fechaDia();
+        System.out.println(fechaEntrada);
 
         System.out.println("Ingrese la fecha de salida:");
         LocalDate fechaSalida = this.fechaDia();
+        System.out.println(fechaSalida);
 
         System.out.println("Ingrese el número de adultos:");
         int numeroAdultos = sc.nextInt();
@@ -72,7 +74,7 @@ public class ReservasView {
 
      
 
-        reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
+        Reservas reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
         
         reservasDAO.crearReserva(reserva);
     }
@@ -132,7 +134,7 @@ public class ReservasView {
         
         sc.nextLine();
 
-        reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
+        Reservas reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
         
         
         reservasDAO.actualizarReserva(reserva, id);

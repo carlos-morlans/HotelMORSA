@@ -77,6 +77,14 @@
     -- Tabla Garaje
     CREATE INDEX idx_Estado ON Garaje (Estado);
 
+
+
+
+
+
+
+
+
 -- Procedimientos
     DELIMITER //
 
@@ -97,9 +105,17 @@
         DECLARE nuevaReservaID INT;
 
         -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-        SET numDias = DATEDIFF(p_fechaEntrada, p_fechaSalida);
+        SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
 
         SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
+
+        IF precioNoche IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'precioNoche es null';
+        END IF;
+        
+        IF numDias IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'numDias es null';
+        END IF;
 
         -- Se asigna el valor a la variable precioTotal y se calcula el precio total
         SET precioTotal = precioNoche * numDias;
@@ -119,8 +135,7 @@
         INSERT INTO HistorialPagos(reservaID, cuantia, fecha, concepto)
         VALUES (nuevaReservaID, precioTotal, NOW(), p_concepto);
 
-        INSERT INTO Pagos (reservaID, fechaPago, monto)
-        VALUES (nuevaReservaID, NOW(), precioTotal);
+        
 
         -- Se actualiza el estado de la habitación a ocupada
         UPDATE Habitaciones

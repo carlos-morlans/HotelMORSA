@@ -1,10 +1,10 @@
 package Dao;
 
 import java.sql.Connection;
-import java.time.LocalDate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class PagosDAO {
 
@@ -12,7 +12,7 @@ public class PagosDAO {
 
     public void filtroCuantia(int limite, Double cuantiaMaxima, Double cuantiaMinima, String tipo) {
         
-        String query = "SELECT * FROM Pagos WHERE Cuantia BETWEEN ? AND ? LIMIT ?";
+        String query = "SELECT * FROM HistorialPagos WHERE Cuantia BETWEEN ? AND ? LIMIT ?";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setDouble(1, cuantiaMinima);
             stmt.setDouble(2, cuantiaMaxima);
@@ -22,13 +22,12 @@ public class PagosDAO {
             
             while (rs.next()) {
                 // Procesar los resultados
-                System.out.println("Pago ID: " + rs.getInt("pagoID"));
-                System.out.println("Reserva ID: " + rs.getInt("reservaID"));
-                System.out.println("Fecha Pago: " + rs.getTimestamp("fechaPago"));
-                System.out.println("Monto: " + rs.getDouble("monto"));
-                System.out.println("Método de Pago: " + rs.getString("metodoPago"));
-                System.out.println("Fecha Reembolso: " + rs.getDate("fechaReembolso"));
-                System.out.println("Motivo Reembolso: " + rs.getString("motivoReembolso"));
+                System.out.println("Pago ID: " + rs.getInt("HistorialPagosID"));
+                System.out.println("Cuantía: " + rs.getDouble("Cuantia"));
+                System.out.println("Fecha Pago: " + rs.getDate("fechaPago"));
+                System.out.println("Concepto: " + rs.getInt("Concepto"));
+                System.out.println("Reserva ID: " + rs.getInt("ReservaID"));
+                System.out.println("Empleado DNI: " + rs.getString("EmpleadoDni"));
                 System.out.println("-----------------------------");
             }
         } catch (SQLException e) {
@@ -41,7 +40,7 @@ public class PagosDAO {
 
     public void filtroDNIEmpleado(int limite, String dniEmpleado, String tipo) {
 
-        String query = "SELECT * FROM Pagos WHERE EmpleadoDNI = ? LIMIT ?";
+        String query = "SELECT * FROM HistorialPagos WHERE EmpleadoDNI = ? LIMIT ?";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, dniEmpleado);
             stmt.setInt(2, limite);
@@ -50,13 +49,12 @@ public class PagosDAO {
             
             while (rs.next()) {
                 
-                System.out.println("Pago ID: " + rs.getInt("pagoID"));
-                System.out.println("Reserva ID: " + rs.getInt("reservaID"));
-                System.out.println("Fecha Pago: " + rs.getTimestamp("fechaPago"));
-                System.out.println("Monto: " + rs.getDouble("monto"));
-                System.out.println("Método de Pago: " + rs.getString("metodoPago"));
-                System.out.println("Fecha Reembolso: " + rs.getDate("fechaReembolso"));
-                System.out.println("Motivo Reembolso: " + rs.getString("motivoReembolso"));
+                System.out.println("Pago ID: " + rs.getInt("HistorialPagosID"));
+                System.out.println("Cuantía: " + rs.getDouble("Cuantia"));
+                System.out.println("Fecha Pago: " + rs.getDate("fechaPago"));
+                System.out.println("Concepto: " + rs.getInt("Concepto"));
+                System.out.println("Reserva ID: " + rs.getInt("ReservaID"));
+                System.out.println("Empleado DNI: " + rs.getString("EmpleadoDni"));
                 System.out.println("-----------------------------");
             }
         } catch (SQLException e) {
@@ -67,7 +65,7 @@ public class PagosDAO {
 
     public void filtroIDReserva(int limite, int idReserva, String tipo) {
 
-        String query = "SELECT * FROM Pagos WHERE ReservaID = ? LIMIT ?";
+        String query = "SELECT * FROM HistorialPagos WHERE ReservaID = ? LIMIT ?";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setInt(1, idReserva);
             stmt.setInt(2, limite);
@@ -76,13 +74,12 @@ public class PagosDAO {
             
             while (rs.next()) {
                 
-                System.out.println("Pago ID: " + rs.getInt("pagoID"));
-                System.out.println("Reserva ID: " + rs.getInt("reservaID"));
-                System.out.println("Fecha Pago: " + rs.getTimestamp("fechaPago"));
-                System.out.println("Monto: " + rs.getDouble("monto"));
-                System.out.println("Método de Pago: " + rs.getString("metodoPago"));
-                System.out.println("Fecha Reembolso: " + rs.getDate("fechaReembolso"));
-                System.out.println("Motivo Reembolso: " + rs.getString("motivoReembolso"));
+                System.out.println("Pago ID: " + rs.getInt("HistorialPagosID"));
+                System.out.println("Cuantía: " + rs.getDouble("Cuantia"));
+                System.out.println("Fecha Pago: " + rs.getDate("fechaPago"));
+                System.out.println("Concepto: " + rs.getInt("Concepto"));
+                System.out.println("Reserva ID: " + rs.getInt("ReservaID"));
+                System.out.println("Empleado DNI: " + rs.getString("EmpleadoDni"));
                 System.out.println("-----------------------------");
             }
 
@@ -94,7 +91,7 @@ public class PagosDAO {
 
     public void filtroRecientes(int limite, String tipo) {
 
-        String query = "SELECT * FROM Pagos ORDER BY FechaPago DESC LIMIT ?";
+        String query = "SELECT * FROM HistorialPagos ORDER BY FechaPago DESC LIMIT ?";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setInt(1, limite);
             
@@ -102,13 +99,12 @@ public class PagosDAO {
             
             while (rs.next()) {
                 
-                System.out.println("Pago ID: " + rs.getInt("pagoID"));
-                System.out.println("Reserva ID: " + rs.getInt("reservaID"));
-                System.out.println("Fecha Pago: " + rs.getTimestamp("fechaPago"));
-                System.out.println("Monto: " + rs.getDouble("monto"));
-                System.out.println("Método de Pago: " + rs.getString("metodoPago"));
-                System.out.println("Fecha Reembolso: " + rs.getDate("fechaReembolso"));
-                System.out.println("Motivo Reembolso: " + rs.getString("motivoReembolso"));
+                System.out.println("Pago ID: " + rs.getInt("HistorialPagosID"));
+                System.out.println("Cuantía: " + rs.getDouble("Cuantia"));
+                System.out.println("Fecha Pago: " + rs.getDate("fechaPago"));
+                System.out.println("Concepto: " + rs.getInt("Concepto"));
+                System.out.println("Reserva ID: " + rs.getInt("ReservaID"));
+                System.out.println("Empleado DNI: " + rs.getString("EmpleadoDni"));
                 System.out.println("-----------------------------");
             }
         } catch (SQLException e) {
@@ -118,7 +114,7 @@ public class PagosDAO {
     }
 
     public void filtroFecha(int limite, LocalDate fechaInicio, LocalDate fechaFin, String tipo, int suma) {
-        String query = "SELECT * FROM Pagos WHERE FechaPago BETWEEN ? AND ? LIMIT ?";
+        String query = "SELECT * FROM HistorialPagos WHERE FechaPago BETWEEN ? AND ? LIMIT ?";
         if(suma == 2){
         
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
@@ -130,13 +126,12 @@ public class PagosDAO {
             
             while (rs.next()) {
                 
-                System.out.println("Pago ID: " + rs.getInt("pagoID"));
-                System.out.println("Reserva ID: " + rs.getInt("reservaID"));
-                System.out.println("Fecha Pago: " + rs.getTimestamp("fechaPago"));
-                System.out.println("Monto: " + rs.getDouble("monto"));
-                System.out.println("Método de Pago: " + rs.getString("metodoPago"));
-                System.out.println("Fecha Reembolso: " + rs.getDate("fechaReembolso"));
-                System.out.println("Motivo Reembolso: " + rs.getString("motivoReembolso"));
+                System.out.println("Pago ID: " + rs.getInt("HistorialPagosID"));
+                System.out.println("Cuantía: " + rs.getDouble("Cuantia"));
+                System.out.println("Fecha Pago: " + rs.getDate("fechaPago"));
+                System.out.println("Concepto: " + rs.getInt("Concepto"));
+                System.out.println("Reserva ID: " + rs.getInt("ReservaID"));
+                System.out.println("Empleado DNI: " + rs.getString("EmpleadoDni"));
                 System.out.println("-----------------------------");
             }
         } catch (SQLException e) {
