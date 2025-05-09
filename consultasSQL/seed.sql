@@ -100,27 +100,29 @@
     )
     BEGIN
         -- Se declaran las variables para almacenar los dias, el precio por noche y el precio total
+        DECLARE precioNocheSelect DECIMAL(10,2);
         DECLARE numDias DECIMAL(10,2);
-        DECLARE precioNoche DECIMAL(10,2);
-        DECLARE precioTotal DECIMAL(10,2); 
+        DECLARE precioTotal DECIMAL(10,2);
         DECLARE nuevaReservaID INT;
-
+		IF p_numeroHabitacion IS NULL tHEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'p_numeroHabitacion es null';
+        END IF;
         -- Se asigna el valor a la variable dia y con DATEDIFF se calcula el número de dias entre las dos fechas
-        SET numDias = DATEDIFF(p_fechaEntrada, p_fechaSalida);
+        SET numDias = DATEDIFF(p_fechaSalida, p_fechaEntrada);
+        SELECT PrecioNoche INTO precioNocheSelect FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
+        IF NOT EXISTS (SELECT 1 FROM Clientes WHERE ClienteDni = p_ClienteDni) THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Error: El cliente no existe en la base de datos';
+		END IF;
 
-        SELECT PrecioNoche INTO precioNoche FROM Habitaciones WHERE NumeroHabitacion = p_numeroHabitacion;
-
-        IF precioNoche IS NULL THEN
+        IF precioNocheSelect IS NULL THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'precioNoche es null';
         END IF;
-        
         IF numDias IS NULL THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'numDias es null';
         END IF;
-
         -- Se asigna el valor a la variable precioTotal y se calcula el precio total
-        SET precioTotal = precioNoche * numDias;
-
+        SET precioTotal = precioNocheSelect * numDias;
         -- Se inserta la reserva en la tabla de Reservas
         INSERT INTO Reservas (
             clienteDni, numeroHabitacion, fechaEntrada, fechaSalida,
@@ -129,14 +131,10 @@
             p_ClienteDni, p_numeroHabitacion, p_fechaEntrada, p_fechaSalida,
             p_numeroAdultos, p_numeroNinos, NOW(), 'Confirmada', precioTotal
         );
-        
         -- Obtener el ID de la reserva nueva
         SET nuevaReservaID = LAST_INSERT_ID();
-
         INSERT INTO HistorialPagos(reservaID, cuantia, fecha, concepto)
         VALUES (nuevaReservaID, precioTotal, NOW(), p_concepto);
-
-        
 
         -- Se actualiza el estado de la habitación a ocupada
         UPDATE Habitaciones

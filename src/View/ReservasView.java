@@ -4,159 +4,269 @@ import Dao.ReservasDAO;
 import Model.Reservas;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ReservasView {
 
-    ReservasDAO reservasDAO = new ReservasDAO();
+    private ReservasDAO reservasDAO;
+    private Scanner scanner;
+    private HabitacionesView habitacion;
 
-    Scanner sc = new Scanner(System.in);
-
-    //Reservas reserva;
-
-    HabitacionesView habitacion = new HabitacionesView();
+    public ReservasView() {
+        this.reservasDAO = new ReservasDAO();
+        this.scanner = new Scanner(System.in);
+        this.habitacion = new HabitacionesView();
+    }
 
     public void menuReservas() {
+        int opcion = -1;
+        do {
+            System.out.println("\n" + "=".repeat(35));
+            System.out.println("** Menú de Reservas **");
+            System.out.println("=".repeat(35));
+            System.out.println("1. Crear Reserva");
+            System.out.println("2. Actualizar Reserva");
+            System.out.println("3. Cancelar Reserva");
+            System.out.println("4. Consultar Reserva");
+            System.out.println("0. Volver al menú principal");
+            System.out.print("Seleccione una opción: ");
+            try {
+                opcion = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Por favor, introduce un número como opción.");
+                scanner.next();
+                opcion = -1;
+                continue;
+            }
+            scanner.nextLine();
+            System.out.println("-".repeat(35));
 
-        int opcion;
-
-
-        System.out.println("1. Crear Reserva");
-        System.out.println("2. Actualizar Reserva");
-        System.out.println("3. Cancelar Reserva");
-        System.out.println("4. Consultar Reservas");
-        System.out.println("5. Volver al menú principal");
-
-        opcion = sc.nextInt();
-        sc.nextLine(); 
-
-        switch (opcion) {
-            case 1-> { this.crearReserva(); }
-            case 2-> { this.actualizarReserva(); }  
-            case 3-> { this.cancelarReserva(); }
-            case 4-> { this.consultarReservas(); }
-            case 5-> { System.out.println("Volviendo al menú principal..."); }
-            default -> { System.out.println("Opción no válida. Intente nuevamente."); }
-        }
-       
-
+            switch (opcion) {
+                case 1 -> crearReserva();
+                case 2 -> actualizarReserva();
+                case 3 -> cancelarReserva();
+                case 4 -> consultarReserva();
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> {
+                    if (opcion != -1) {
+                        System.out.println("Opción no válida. Intente nuevamente.");
+                    }
+                }
+            }
+        } while (opcion != 0);
     }
 
     public void crearReserva() {
-        System.out.println("Ingrese el DNI del cliente:");
-        String dni = sc.nextLine();
+        System.out.println("\n--- Crear Nueva Reserva ---");
+        System.out.print("Ingrese el DNI del cliente: ");
+        String dni = scanner.nextLine();
 
-        System.out.println("Elija el tipo de habitación que desea:");
-        System.out.println("1. Individuale, doble, familiare  suit");
+        System.out.println("\n--- Elija el tipo de habitación que desea: ---");
         habitacion.listarHabitaciones();
 
+        int numeroHabitacion = -1;
+        try {
+            System.out.print("Ingrese el número de habitación: ");
+            numeroHabitacion = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número de habitación válido.");
+            scanner.next();
+            return;
+        }
 
-
-        System.out.println("Ingrese el número de habitación:");
-        int numeroHabitacion = sc.nextInt();
-        sc.nextLine();
-
+        LocalDate fechaEntrada = null;
         System.out.println("Ingrese la fecha de entrada:");
-        LocalDate fechaEntrada = this.fechaDia();
-        System.out.println(fechaEntrada);
+        fechaEntrada = this.fechaDia();
+        if (fechaEntrada != null) {
+            System.out.println("Fecha de entrada: " + fechaEntrada);
+        } else {
+            return;
+        }
 
+        LocalDate fechaSalida = null;
         System.out.println("Ingrese la fecha de salida:");
-        LocalDate fechaSalida = this.fechaDia();
-        System.out.println(fechaSalida);
+        fechaSalida = this.fechaDia();
+        if (fechaSalida != null) {
+            System.out.println("Fecha de salida: " + fechaSalida);
+        } else {
+            return;
+        }
 
-        System.out.println("Ingrese el número de adultos:");
-        int numeroAdultos = sc.nextInt();
-        sc.nextLine();
+        int numeroAdultos = -1;
+        try {
+            System.out.print("Ingrese el número de adultos: ");
+            numeroAdultos = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número de adultos válido.");
+            scanner.next();
+            return;
+        }
 
-        System.out.println("Ingrese el número de ninos:");
-        int numeroNinos = sc.nextInt();
-        sc.nextLine();
-
-     
+        int numeroNinos = -1;
+        try {
+            System.out.print("Ingrese el número de niños: ");
+            numeroNinos = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número de niños válido.");
+            scanner.next();
+            return;
+        }
 
         Reservas reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
-        
         reservasDAO.crearReserva(reserva);
+        System.out.println("Reserva creada exitosamente.");
     }
 
-    public LocalDateTime fechaMinuto(){
-        int year, month, day, hour, minute;
-        System.out.println("Ingrese el ano:");
-        year = sc.nextInt();
-        System.out.println("Ingrese el mes:");
-        month = sc.nextInt();
-        System.out.println("Ingrese el día:");
-        day = sc.nextInt();
-        System.out.println("Ingrese la hora:");
-        hour = sc.nextInt();
-        System.out.println("Ingrese los minutos:");
-        minute = sc.nextInt();
-        return LocalDateTime.of(year, month, day, hour, minute);
+    public LocalDateTime fechaMinuto() {
+        int year = 0, month = 0, day = 0, hour = 0, minute = 0;
+        try {
+            System.out.print("Ingrese el año: ");
+            year = scanner.nextInt();
+            System.out.print("Ingrese el mes: ");
+            month = scanner.nextInt();
+            System.out.print("Ingrese el día: ");
+            day = scanner.nextInt();
+            System.out.print("Ingrese la hora: ");
+            hour = scanner.nextInt();
+            System.out.print("Ingrese los minutos: ");
+            minute = scanner.nextInt();
+            scanner.nextLine();
+            return LocalDateTime.of(year, month, day, hour, minute);
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce valores numéricos válidos para la fecha y hora.");
+            scanner.next();
+            return null;
+        }
     }
 
-    public LocalDate fechaDia(){
-        int year, month, day;
-        System.out.println("Ingrese el ano:");
-        year = sc.nextInt();
-        System.out.println("Ingrese el mes:");
-        month = sc.nextInt();
-        System.out.println("Ingrese el día:");
-        day = sc.nextInt();
-        return LocalDate.of(year, month, day);
+    public LocalDate fechaDia() {
+        int year = 0, month = 0, day = 0;
+        try {
+            System.out.print("Ingrese el año: ");
+            year = scanner.nextInt();
+            System.out.print("Ingrese el mes (1-12): ");
+            month = scanner.nextInt();
+            System.out.print("Ingrese el día (1-31): ");
+            day = scanner.nextInt();
+            scanner.nextLine();
+            return LocalDate.of(year, month, day);
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce valores numéricos válidos para la fecha.");
+            scanner.next();
+            return null;
+        } catch (java.time.DateTimeException e) {
+            System.out.println("Error: La fecha introducida no es válida. Por favor, verifica el día y el mes.");
+            return null;
+        }
     }
 
     public void actualizarReserva() {
-        System.out.println("Ingrese el ID de la reserva a actualizar:");
-        int id = sc.nextInt();
-        sc.nextLine();
+        System.out.println("\n--- Actualizar Reserva ---");
+        int id = -1;
+        try {
+            System.out.print("Ingrese el ID de la reserva a actualizar: ");
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un ID de reserva válido.");
+            scanner.next();
+            return;
+        }
 
-        System.out.println("Ingrese el nuevo DNI del cliente:");
-        String dni = sc.nextLine();
+        System.out.print("Ingrese el nuevo DNI del cliente: ");
+        String dni = scanner.nextLine();
 
-        System.out.println("Ingrese el nuevo número de habitación:");
-        int numeroHabitacion = sc.nextInt();
-        sc.nextLine();
+        int numeroHabitacion = -1;
+        try {
+            System.out.print("Ingrese el nuevo número de habitación: ");
+            numeroHabitacion = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número de habitación válido.");
+            scanner.next();
+            return;
+        }
 
+        LocalDate fechaEntrada = null;
         System.out.println("Ingrese la nueva fecha de entrada:");
-        LocalDate fechaEntrada = this.fechaDia();
+        fechaEntrada = this.fechaDia();
+        if (fechaEntrada == null) return;
 
+        LocalDate fechaSalida = null;
         System.out.println("Ingrese la nueva fecha de salida:");
-        LocalDate fechaSalida = this.fechaDia();
+        fechaSalida = this.fechaDia();
+        if (fechaSalida == null) return;
 
-        System.out.println("Ingrese el nuevo número de adultos:");
-        int numeroAdultos = sc.nextInt();
-        sc.nextLine();
+        int numeroAdultos = -1;
+        try {
+            System.out.print("Ingrese el nuevo número de adultos: ");
+            numeroAdultos = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número de adultos válido.");
+            scanner.next();
+            return;
+        }
 
-        System.out.println("Ingrese el nuevo número de ninos:");
-        int numeroNinos = sc.nextInt();
-        sc.nextLine();
-
-        
-        sc.nextLine();
+        int numeroNinos = -1;
+        try {
+            System.out.print("Ingrese el nuevo número de niños: ");
+            numeroNinos = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un número de niños válido.");
+            scanner.next();
+            return;
+        }
 
         Reservas reserva = new Reservas(dni, numeroHabitacion, fechaEntrada, fechaSalida, numeroAdultos, numeroNinos);
-        
-        
         reservasDAO.actualizarReserva(reserva, id);
+        System.out.println("Reserva con ID " + id + " actualizada exitosamente.");
     }
-    public void cancelarReserva() {
-        System.out.println("Ingrese el ID de la reserva a cancelar:");
-        int id = sc.nextInt();
-        sc.nextLine();
 
-        System.out.println("Ingrese el motivo de la cancelación:");
-        String motivo = sc.nextLine();
+    public void cancelarReserva() {
+        System.out.println("\n--- Cancelar Reserva ---");
+        int id = -1;
+        try {
+            System.out.print("Ingrese el ID de la reserva a cancelar: ");
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un ID de reserva válido.");
+            scanner.next();
+            return;
+        }
+
+        System.out.print("Ingrese el motivo de la cancelación: ");
+        String motivo = scanner.nextLine();
 
         reservasDAO.cancelarReserva(id, motivo);
+        System.out.println("Reserva con ID " + id + " cancelada.");
     }
 
-    public void consultarReservas() {
-        System.out.println("Ingrese el ID de la reserva a consultar:");
-        int id = sc.nextInt();
-        sc.nextLine();
+    public void consultarReserva() {
+        System.out.println("\n--- Consultar Reserva ---");
+        int id = -1;
+        try {
+            System.out.print("Ingrese el ID de la reserva a consultar: ");
+            id = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Por favor, introduce un ID de reserva válido.");
+            scanner.next();
+            return;
+        }
 
         reservasDAO.consultarReserva(id);
-        
     }
 
+    public void cerrarScanner() {
+        if (scanner != null) {
+            scanner.close();
+        }
+    }
 }

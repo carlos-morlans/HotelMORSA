@@ -34,11 +34,6 @@ public class ReservasDAO {
             // Establecer parámetros de entrada
             stmt.setString(1, reserva.getClienteDni());
             stmt.setInt(2, reserva.getNumeroHabitacion());
-            System.out.println(reserva.getNumeroHabitacion());
-
-            // Conversión de LocalDate a java.sql.Date
-            System.out.println(reserva.getFechaEntrada());
-            System.out.println(reserva.getFechaSalida());
 
             stmt.setDate(3, java.sql.Date.valueOf(reserva.getFechaEntrada()));
             stmt.setDate(4, java.sql.Date.valueOf(reserva.getFechaSalida()));
